@@ -1,0 +1,26 @@
+table.table-posts {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.text-center {
+  text-align: center;
+}
+
+table.table-posts th,
+table.table-posts td {
+  border: 1px solid black;
+  padding: 0.25rem;
+}
+
+.table-posts > thead > tr > th {
+  background-color: #dcdcdc;
+}
+
+#alerts > p {
+  border: 1px solid red;
+  background-color: #d91a5c;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+}

@@ -9,7 +9,9 @@ from .models import Vehicle
 def get_vehicle_list(request: HttpRequest) -> HttpResponse:
     vehicles = Vehicle.objects.all()
 
-    content = ["<a href='/vehicles/add/'>Add new Vehicle</a><ul>"]
+    content = [
+        "<a href='/vehicles/add/'>Add new Vehicle</a> | <a href='/posts/'>Blog</a><ul>"
+    ]
     for vehicle in vehicles:
         content.append(
             f"<li><a href='/vehicles/{vehicle.pk}/'>{vehicle.make} "
@@ -30,7 +32,8 @@ def get_vehicle_details(request: HttpRequest, pk: int) -> HttpResponse:
         </p>
         <h1>{vehicle.make} {vehicle.model}</h1>
         <p>Year: {vehicle.year}
-        </p><p>{vehicle.description}</p></div>""")
+        </p><p>{vehicle.description}</p></div>"""
+    )
 
 
 @csrf_exempt
@@ -38,12 +41,13 @@ def add_new_vehicle(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         # merr te dhenat, krijo vehicle, ruaje ne db
         data = {k: v for k, v in request.POST.items()}
-        data['year'] = int(data['year'])
+        data["year"] = int(data["year"])
         vehicle = Vehicle(**data)
         vehicle.save()
         return HttpResponseRedirect(f"/vehicles/{vehicle.pk}/")
     else:
-        return HttpResponse("""
+        return HttpResponse(
+            """
         <h1>Add new Vehicle</h1>
         <form action="" method="post">
             <div>
@@ -66,7 +70,8 @@ def add_new_vehicle(request: HttpRequest) -> HttpResponse:
                 <button type="submit">Save</button>
             </div>
         </form>
-        """)
+        """
+        )
 
 
 @csrf_exempt
@@ -75,13 +80,14 @@ def edit_vehicle(request: HttpRequest, pk: int) -> HttpResponse:
     if request.method == "POST":
         # merr te dhenat, modifiko vehicle, ruaje ne db
         data = {k: v for k, v in request.POST.items()}
-        data['year'] = int(data['year'])
+        data["year"] = int(data["year"])
         for key, val in data.items():
             setattr(vehicle, key, val)
         vehicle.save()
         return HttpResponseRedirect(f"/vehicles/{vehicle.pk}/")
     else:
-        return HttpResponse(f"""
+        return HttpResponse(
+            f"""
         <h1>Update Vehicle</h1>
         <form action="" method="post">
             <div>
@@ -104,7 +110,8 @@ def edit_vehicle(request: HttpRequest, pk: int) -> HttpResponse:
                 <button type="submit">Save</button>
             </div>
         </form>
-        """)
+        """
+        )
 
 
 @csrf_exempt
@@ -114,7 +121,8 @@ def remove_vehicle(request: HttpRequest, pk: int) -> HttpResponse:
         vehicle.delete()
         return HttpResponseRedirect("/")
     else:
-        return HttpResponse(f"""
+        return HttpResponse(
+            f"""
         <h1>Remove Vehicle</h1>
         <form action="" method="post">
             <div>
@@ -125,4 +133,5 @@ def remove_vehicle(request: HttpRequest, pk: int) -> HttpResponse:
                 <a href="/vehicles/{vehicle.pk}/">Cancel</a>
             </div>
         </form>
-        """)
+        """
+        )

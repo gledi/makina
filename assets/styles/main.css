@@ -1,0 +1,91 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+}
+
+header {
+  background-color: #0C4B33;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+header .logo {
+  color: #f0f0f0;
+  display: block;
+  text-decoration: none;
+  font-family: 'Secular One', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  margin: 0;
+  padding: 0;
+  text-shadow: 1px 1px 0 #0f0f0f;
+  transition: all 0.5s ease-in-out;
+}
+
+header .logo > small {
+  font-size: 16px;
+}
+
+header .logo:hover {
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+}
+
+header > nav > ul {
+  margin: 0;
+  list-style: none outside none;
+  display: flex;
+  flex-direction: row;
+}
+
+nav a {
+  color: #f1fff7;
+  display: block;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav > ul > li:last-child > a {
+  padding-right: 0;
+}
+
+nav a:hover {
+  color: #44b78b;
+}
+
+main {
+  width: 960px;
+  margin: 0 auto;
+}
+
+body > footer {
+  position: sticky;
+  top: 100vh;
+}
+
+footer {
+  background-color: #0C4B33;
+}
+
+footer > p {
+  font-size: 12px;
+  line-height: 18px;
+  color: #93D7B7;
+  text-align: center;
+  padding: 1rem 0;
+}

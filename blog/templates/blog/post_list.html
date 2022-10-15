@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} Blog Posts - {{ block.super }}{% endblock title %}
+
+{% block content %}
+<h1>Blog Posts</h1>
+<p>
+  <a href="/posts/manage/">Manage Posts</a>
+</p>
+<ul>
+  {% for post in posts %}
+  <li>
+    <a href="/posts/{{ post.pk }}/">{{ post.title }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}
