@@ -89,3 +89,28 @@ footer > p {
   text-align: center;
   padding: 1rem 0;
 }
+
+.form-field {
+  padding: 0.5rem 1rem;
+}
+
+.form-field > label {
+  display: block;
+}
+
+.form-error {
+  color: red;
+  font-weight: 700;
+}
+
+.field-error {
+  font-size: 12px;
+  font-weight: 500;
+  color: #cd1811;
+}
+
+.field-help {
+  font-size: 12px;
+  color: #434343;
+  font-weight: 400;
+}

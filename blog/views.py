@@ -5,12 +5,12 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseNotFound, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from .models import Post
 
 
 def get_posts(request: HttpRequest) -> HttpResponse:
-    # select * from posts where is_published = true
     posts = Post.objects.filter(is_published=True).all()
     return render(
         request,
@@ -21,7 +21,7 @@ def get_posts(request: HttpRequest) -> HttpResponse:
 
 def get_post_details(request: HttpRequest, pk: int) -> HttpResponse:
     try:
-        post = Post.objects.get(pk=pk)  # SELECT * FROM posts WHERE id = ?
+        post = Post.objects.get(pk=pk)
     except Post.DoesNotExist:
         return HttpResponseNotFound("Post not found")
 
@@ -44,11 +44,11 @@ def publish_post(request: HttpRequest) -> HttpResponse:
         post = Post.objects.get(pk=cmd["postId"])
     except Post.DoesNotExist:
         return JsonResponse(
-            {"message": "Post does not exist"}, status=HTTPStatus.NOT_FOUND
+            {"message": _("Post does not exist")}, status=HTTPStatus.NOT_FOUND
         )
 
     post.is_published = True
     post.published_on = timezone.now()
     post.save()
 
-    return JsonResponse({"message": "Post has been published successfully"})
+    return JsonResponse({"message": _("Post has been published successfully")})

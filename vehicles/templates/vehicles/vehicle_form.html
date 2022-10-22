@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Add new Vehicle</h1>
+
+<form action="" method="post" novalidate>
+  {% csrf_token %}
+  {% for error in form.non_field_errors %}
+  <div class="form-error">
+    {{ error }}
+  </div>
+  {% endfor %}
+  {% for field in form %}
+  <div class="form-field">
+    {{ field.label_tag }}
+    {{ field }}
+    {% if field.help_text %}
+    <div class="field-help">{{ field.help_text }}</div>
+    {% endif %}
+    {% if field.errors %}
+      {% for error in field.errors %}
+      <div class="field-error">{{ error }}</div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  {% endfor %}
+  <div class="form-actions">
+    <button type="submit">Save</button>
+  </div>
+</form>
+{% endblock content %}

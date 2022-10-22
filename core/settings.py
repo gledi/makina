@@ -19,19 +19,25 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # django builtin apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 3rd party apps
+    "debug_toolbar",
+    # local apps
     "pages",  # "pages.apps.PagesConfig"
     "vehicles",  # "vehicles.apps.VehiclesConfig"
     "blog",
+    "users",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -94,7 +100,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "sq"
+LANGUAGES = [
+    ("en", "English"),
+    ("it", "Italian"),
+    ("sq", "Albanian"),
+]
+LOCALE_PATHS = [BASE_DIR / "locales"]
 USE_I18N = True
 
 TIME_ZONE = "UTC"
@@ -112,3 +124,8 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+AUTH_USER_MODEL = "users.User"
+
+INTERNAL_IPS = ["127.0.0.1"]

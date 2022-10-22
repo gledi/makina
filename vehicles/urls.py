@@ -4,9 +4,9 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.get_vehicle_list),
-    path("vehicles/<int:pk>/", views.get_vehicle_details),
-    path("vehicles/add/", views.add_new_vehicle),
-    path("vehicles/<int:pk>/edit/", views.edit_vehicle),
-    path("vehicles/<int:pk>/delete/", views.remove_vehicle),
+    path("", views.VehicleListView.as_view(), name="vehicle-list"),
+    path(
+        "vehicles/<int:pk>/", views.VehicleDetailView.as_view(), name="vehicle-detail"
+    ),
+    path("vehicles/add/", views.create_vehicle, name="vehicle-add"),
 ]
