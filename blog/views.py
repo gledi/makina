@@ -25,6 +25,9 @@ def get_post_details(request: HttpRequest, pk: int) -> HttpResponse:
     except Post.DoesNotExist:
         return HttpResponseNotFound("Post not found")
 
+    key = f"post_{post.pk}_views"
+    request.session[key] = request.session.get(key, 0) + 1
+
     return render(
         request,
         "blog/post_detail.html",

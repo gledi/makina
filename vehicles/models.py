@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 
@@ -60,6 +61,9 @@ class Vehicle(models.Model):  # vehicles_vehicle
 
     def __str__(self) -> str:
         return f"{self.year} {self.make} {self.model} {self.get_transmission_display()}/{self.fuel}"
+
+    def get_absolute_url(self):
+        return reverse("vehicle-detail", kwargs={"pk": self.pk})
 
 
 class Photo(models.Model):

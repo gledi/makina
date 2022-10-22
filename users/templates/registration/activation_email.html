@@ -1,0 +1,12 @@
+<p>Thank you for registering!</p>
+
+<p>Please click the link below to activate your registration:</p>
+
+<p>
+  <a href="{% url 'registration-activation' key=registration.activation_key %}">
+    {% url 'registration-activation' key=registration.activation_key %}
+  </a>
+</p>
+
+Regards,
+Your friends at makina.al

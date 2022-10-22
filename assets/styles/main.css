@@ -114,3 +114,14 @@ footer > p {
   color: #434343;
   font-weight: 400;
 }
+
+.messages {
+  margin-top: 1rem;
+}
+
+.messages > .message.warning {
+  border: 1px solid yellow;
+  background-color: orange;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}

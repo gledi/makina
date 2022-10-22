@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if vehicle %}
+<h1>Edit <small>{{ vehicle }}</small></h1>
+{% else %}
 <h1>Add new Vehicle</h1>
+{% endif %}
 
 <form action="" method="post" novalidate>
   {% csrf_token %}

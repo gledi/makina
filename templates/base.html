@@ -16,26 +16,19 @@
     {% endblock styles %}
   </head>
   <body>
-    <header>
-      <a href="/" class="logo">makina<small>.al</small></a>
-      <nav>
-        <ul>
-          <li><a href="/">{% translate "Home" %}</a></li>
-          <li><a href="/">{% translate "Vehicles" %}</a></li>
-          <li><a href="/posts/">{% translate "Blog" %}</a></li>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Contact Us</a></li>
-          <li><a href="">Privacy Policy</a></li>
-        </ul>
-      </nav>
-      <nav>
-        <ul>
-          <li><a href="">Login</a></li>
-          <li><a href="">Register</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main>{% block content %}{% endblock content %}</main>
+    {% include 'header.html' %}
+    <main>
+      {% if messages %}
+        <div class="messages">
+        {% for message in messages %}
+          <div class="message {{ message.level_tag }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock content %}
+    </main>
     <footer>
       <p>Copyright &copy; 2022 - Python Tirana 7</p>
     </footer>

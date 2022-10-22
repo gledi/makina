@@ -2,7 +2,26 @@
 
 {% block title %}{{ vehicle }} - {{ block.super }}{% endblock title %}
 
+{% block styles %}
+{{ block.super }}
+<style>
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+{% endblock styles %}
+
+
 {% block content %}
-<h1>{{ vehicle }}</h1>
+<div class="detail-header">
+  <h1>{{ vehicle|upper }}</h1>
+  <div>
+    <a href="{% url 'vehicle-edit' pk=vehicle.pk %}">Edit Vehicle</a>
+    |
+    <a href="{% url 'vehicle-delete' pk=vehicle.pk %}">Delete Vehicle</a>
+  </div>
+</div>
 <p>{{ vehicle.description }}</p>
 {% endblock content %}

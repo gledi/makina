@@ -100,7 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "sq"
+LANGUAGE_CODE = "en"
 LANGUAGES = [
     ("en", "English"),
     ("it", "Italian"),
@@ -129,3 +129,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+
+LOGOUT_REDIRECT_URL = "/"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "registration@makina.al"
