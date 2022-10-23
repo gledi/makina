@@ -3,7 +3,7 @@ import datetime
 
 from django import forms
 
-from .models import Vehicle
+from .models import Photo, Vehicle
 
 
 re_personal_no = re.compile(r"^[A-Z][0-9]{8}[A-Z]$")
@@ -53,3 +53,6 @@ class VehicleForm(forms.ModelForm):
         if transmission == Vehicle.TRANSMISSION_MANUAL and fuel == Vehicle.ELECTRIC:
             raise forms.ValidationError("Ska mundesi elektrik dhe manual")
         return data
+
+
+PhotoFormSet = forms.inlineformset_factory(Vehicle, Photo, fields=("picture",))

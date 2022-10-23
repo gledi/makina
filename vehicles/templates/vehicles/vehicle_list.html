@@ -4,7 +4,24 @@
 <h1>Vehicles for Sale</h1>
 <p>
   <a href="{% url 'vehicle-add' %}">Add new Vehicle</a>
+  {% if perms.vehicles.publish_vehicle %}
+  |
+  <a href="{% url 'vehicle-manage' %}">Manage Vehicles</a>
+  {% endif %}
 </p>
+<div>
+  <ul class="paginated-list">
+    {% for page in pages %}
+    <li>
+      {% if page == paginator.ELLIPSIS %}
+      <span>{{ page }}</span>
+      {% else %}
+      <a href="?page={{ page }}">{{ page }}</a>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 {% for vehicle in vehicles %}
 <p><a href="{% url 'vehicle-detail' pk=vehicle.pk %}">{{ vehicle }}</a></p>
 {% endfor %}

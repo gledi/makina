@@ -58,6 +58,9 @@ class Vehicle(models.Model):  # vehicles_vehicle
         db_table = "vehicles"
         verbose_name = _("vehicle")
         verbose_name_plural = _("vehicles")
+        permissions = [
+            ("publish_vehicle", "Can publish vehicle"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.year} {self.make} {self.model} {self.get_transmission_display()}/{self.fuel}"

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Manage Vehicles</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Price</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for vehicle in vehicles %}
+    <tr>
+      <td>{{ vehicle.pk }}</td>
+      <td>{{ vehicle.make }}</td>
+      <td>{{ vehicle.model }}</td>
+      <td>{{ vehicle.price }}</td>
+      <td>
+        <a href="{% url 'vehicle-detail' pk=vehicle.pk %}">View</a>
+      </td>
+      <td>
+        <form action="{% url 'vehicle-publish' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="vehicle_id" value="{{ vehicle.pk }}">
+          <button type="submit">Publish</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

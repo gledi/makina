@@ -12,7 +12,7 @@ urlpatterns = [
     ),
     path(
         "vehicles/add/",
-        views.VehicleCreateView.as_view(),
+        views.create_vehicle,
         name="vehicle-add",
     ),
     path(
@@ -24,5 +24,30 @@ urlpatterns = [
         "vehicles/<int:pk>/delete/",
         views.VehicleDeleteView.as_view(),
         name="vehicle-delete",
+    ),
+    path(
+        "vehicles/manage/",
+        views.manage_vehicles,
+        name="vehicle-manage",
+    ),
+    path(
+        "vehicles/publish/",
+        views.publish_vehicle,
+        name="vehicle-publish",
+    ),
+    path(
+        "api/vehicles/",
+        views.get_vehicles_as_json,
+        name="api-vehicle-list",
+    ),
+    path(
+        "api/v1/vehicles/",
+        views.VehicleListCreateView.as_view(),
+        name="api-vehicles",
+    ),
+    path(
+        "api/v1/vehicles/<int:pk>/",
+        views.VehicleDetailUpdateDeleteView.as_view(),
+        name="api-vehicles-detail",
     ),
 ]
