@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 3rd party apps
     "debug_toolbar",
+    "rest_framework",
+    "crispy_forms",
+    "crispy_bulma",
     # local apps
     "pages",  # "pages.apps.PagesConfig"
     "vehicles",  # "vehicles.apps.VehiclesConfig"
@@ -138,3 +141,6 @@ LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "registration@makina.al"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+CRISPY_TEMPLATE_PACK = "bulma"

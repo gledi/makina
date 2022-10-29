@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-<h1>Register Here</h1>
+<h1 class="title">Login</h1>
 <form action="" method="post" novalidate>
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form|crispy }}
   <div class="form-actions">
-    <button type="submit">Register</button>
+    <button class="button is-primary" type="submit">Login</button>
   </div>
 </form>
 {% endblock content %}
