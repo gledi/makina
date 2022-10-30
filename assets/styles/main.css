@@ -12,36 +12,25 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-header {
-  background-color: #0C4B33;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-
-header .logo {
-  color: #f0f0f0;
-  display: block;
+.site-logo {
+  color: #93D7B7;
   text-decoration: none;
   font-family: 'Secular One', sans-serif;
   font-weight: 400;
   font-size: 24px;
   line-height: 28px;
-  margin: 0;
-  padding: 0;
   text-shadow: 1px 1px 0 #0f0f0f;
-  transition: all 0.5s ease-in-out;
+  transition: color 0.5s ease-in, text-shadow 0.5s ease-out;
 }
 
-header .logo > small {
+.site-logo > small {
   font-size: 16px;
+  line-height: 20px;
 }
 
-header .logo:hover {
-  color: #fff;
-  text-shadow: 2px 2px 0 #000;
+a.site-logo:hover {
+  color: #0C4B33;
+  text-shadow: 2px 2px 0 #ccc;
 }
 
 header > nav > ul {

@@ -1,0 +1,65 @@
+{% load i18n %}
+<header>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item site-logo" href="{% url 'index' %}">
+        <strong>makina</strong></small>.al</small>
+      </a>
+
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbar-main-menu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbar-main-menu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="{% url 'index' %}">{% translate 'Home' %}</a>
+        <a class="navbar-item" href="{% url 'vehicle-list' %}">{% translate "Vehicles" %}</a>
+        <a class="navbar-item" href="{% url 'post-list' %}">{% translate "News" %}</a>
+        <a class="navbar-item" href="{% url 'about-us' %}">{% translate "About Us" %}</a>
+        <a class="navbar-item" href="{% url 'contact-us' %}">{% translate "Contact Us" %}</a>
+        <a class="navbar-item" href="{% url 'privacy-policy' %}">{% translate "Privacy Policy" %}</a>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">{% translate 'More' %}</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="">{% translate 'Careers' %}</a>
+            <a class="navbar-item" href="">{% translate 'Gift Shop' %}</a>
+            <hr class="navbar-divider" />
+            <a class="navbar-item" href="">{% translate 'Report an issue' %}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            {% if user.is_authenticated %}
+            <a class="button is-primary" href="{% url 'profile' %}">
+              <strong>{{ user.username }}</strong>
+            </a>
+            <a class="button is-link" href="{% url 'logout' %}">
+              {% translate 'Log out' %}
+            </a>
+            {% else %}
+            <a class="button is-primary" href="{% url 'login' %}">
+              <strong>{% translate 'Log in' %}</strong>
+            </a>
+            <a class="button is-link" href="{% url 'register' %}">
+              {% translate 'Register' %}
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

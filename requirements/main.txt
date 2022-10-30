@@ -1,0 +1,7 @@
+django==4.1.2
+django-crispy-forms==1.14.0
+crispy-bulma==0.8.0
+djangorestframework==3.14.0
+mistune==2.0.4
+pillow==9.3.0
+django-imagekit==4.1.0

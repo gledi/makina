@@ -29,3 +29,7 @@ python manage.py runserver
 ```
 
 Visit the following url on your browser: http://localhost:8000/
+
+Deploy
+======
+

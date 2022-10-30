@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %} Blog Posts - {{ block.super }}{% endblock title %}
+{% load i18n crispy_forms_tags %}
+
+{% block title %}{% translate 'Blog Posts' %} · {{ block.super }}{% endblock title %}
 
 {% block content %}
-<h1>Blog Posts</h1>
-<p>
-  <a href="/posts/manage/">Manage Posts</a>
-</p>
+<div class="is-flex is-justify-content-space-between is-align-items-center	">
+  <h1 class="title">{% translate 'Blog Posts' %}</h1>
+  <a class="button is-link" href="{% url 'post-manage' %}">{% translate 'Manage Posts' %}</a>
+</div>
 <ul>
   {% for post in posts %}
   <li>
