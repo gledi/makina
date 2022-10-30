@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load i18n static %}
 {% block title %}{{ vehicle }} - {{ block.super }}{% endblock title %}
 
 {% block styles %}
@@ -29,12 +29,11 @@
 
 
 {% block content %}
-<div class="detail-header">
-  <h3>{{ vehicle|upper }}</h3>
+<div class="is-flex is-justify-content-space-between">
+  <h1 class="title">{{ vehicle }}</h1>
   <div>
-    <a href="{% url 'vehicle-edit' pk=vehicle.pk %}">Edit Vehicle</a>
-    |
-    <a href="{% url 'vehicle-delete' pk=vehicle.pk %}">Delete Vehicle</a>
+    <a href="{% url 'vehicle-edit' pk=vehicle.pk %}" class="button is-primary">Edit</a>
+    <a href="{% url 'vehicle-delete' pk=vehicle.pk %}" class="button is-danger">Delete</a>
   </div>
 </div>
 <section class="vehicle-info">

@@ -29,9 +29,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-
-import vehicles
-
 from .models import Vehicle, Photo
 from .forms import VehicleForm, PhotoFormSet
 from .serializers import VehicleSerializer
