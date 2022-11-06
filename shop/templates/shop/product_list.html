@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block content %}
+<h1 class="title">{% translate "Products" %}</h1>
+<div id="product-list" class="is-flex is-justify-content-space-between">
+  {% for product in products %}
+  <div class="card">
+    <div class="card-image">
+      <figure class="image">
+        <img src="{{ product.photo_md.url }}" alt="{{ product.name }}" width="480" height="360">
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="content">
+        <h3 class="subtitle">{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>{{ product.price }} €</p>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <button class="button is-white card-footer-item">
+        <span class="icon">
+          <i class="fas fa-star"></i>
+        </span>
+        <span>Favorite</span>
+      </button>
+      <button class="button is-white card-footer-item purchase" data-product="{{ product.pk }}" data-price="{{ product.price_id }}">
+        <span class="icon purchase">
+          <i class="fas fa-cart-shopping purchase"></i>
+        </span>
+        <span class="purchase">Purchase</span>
+      </button>
+    </footer>
+  </div>
+  {% empty %}
+  <article class="message is-warning">
+    <div class="message-header">
+      <p>{% translate "No Products" %}</p>
+      <button class="delete" aria-label="delete"></button>
+    </div>
+    <div class="message-body">
+    We don't sell anything yet
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const configUrl = "{% url 'product-stripe-config' %}";
+const checkoutSessionUrl = "{% url 'checkout-session' %}";
+</script>
+<script src="{% static 'shop/scripts/main.js' %}"></script>
+{% endblock scripts %}

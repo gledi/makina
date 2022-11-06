@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import transaction
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect, resolve_url, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.core.mail import send_mail

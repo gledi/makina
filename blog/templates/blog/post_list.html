@@ -5,14 +5,14 @@
 {% block title %}{% translate 'Blog Posts' %} · {{ block.super }}{% endblock title %}
 
 {% block content %}
-<div class="is-flex is-justify-content-space-between is-align-items-center	">
+<div class="is-flex is-justify-content-space-between is-align-items-center">
   <h1 class="title">{% translate 'Blog Posts' %}</h1>
   <a class="button is-link" href="{% url 'post-manage' %}">{% translate 'Manage Posts' %}</a>
 </div>
 <ul>
   {% for post in posts %}
   <li>
-    <a href="/posts/{{ post.pk }}/">{{ post.title }}</a>
+    <a href="{% url 'post-details' pk=post.pk %}">{{ post.title }}</a>
   </li>
   {% endfor %}
 </ul>

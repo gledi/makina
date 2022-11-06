@@ -2,15 +2,10 @@
 
 {% block title %}Manage Blog Posts - {{ block.super }}{% endblock title %}
 
-{% block styles %}
-{{ block.super }}
-<link rel="stylesheet" href="/static/blog/styles/management.css" />
-{% endblock styles %}
-
 {% block content %}
-<h1>Manage Posts</h1>
+<h1 class="title">Manage Posts</h1>
 <div id="alerts"></div>
-<table class="table-posts">
+<table class="table table-posts">
   <thead>
     <tr>
       <th>ID</th>
@@ -28,7 +23,7 @@
       <td>{{ post.author }}</td>
       <td class="text-center">{{ post.is_published }}</td>
       <td class="text-center">
-        <button data-postid="{{ post.pk }}" {% if post.is_published %}disabled{% endif %}>
+        <button class="button is-primary is-light is-small" data-postid="{{ post.pk }}" {% if post.is_published %}disabled{% endif %}>
           Publish
         </button>
       </td>

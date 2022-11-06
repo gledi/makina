@@ -1,5 +1,10 @@
 from pathlib import Path
 
+from environs import Env
+
+env = Env()
+env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -8,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6=ci#w(vby%+_tl2bkxp7_l@w*85=p0d&!6@))$@d0d(kq6-f5"
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -26,15 +31,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     # 3rd party apps
     "rest_framework",
     "crispy_forms",
     "crispy_bulma",
+    "fontawesomefree",
+    "imagekit",
     # local apps
     "pages",  # "pages.apps.PagesConfig"
     "vehicles",  # "vehicles.apps.VehiclesConfig"
     "blog",
     "users",
+    "shop",
 ]
 
 MIDDLEWARE = [
@@ -132,8 +141,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 
-INTERNAL_IPS = ["127.0.0.1"]
-
 
 LOGOUT_REDIRECT_URL = "/"
 
@@ -146,3 +153,23 @@ CRISPY_TEMPLATE_PACK = "bulma"
 if DEBUG:
     INSTALLED_APPS.extend(["debug_toolbar", "django_extensions"])
     MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ["127.0.0.1"]
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO" if DEBUG else "WARNING",
+    },
+}
+
+
+STRIPE_PUBLISHABLE_KEY = env.str("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = env.str("STRIPE_SECRET_KEY")

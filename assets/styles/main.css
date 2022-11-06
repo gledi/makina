@@ -19,13 +19,15 @@ body {
   font-weight: 400;
   font-size: 24px;
   line-height: 28px;
+  vertical-align: text-bottom;
   text-shadow: 1px 1px 0 #0f0f0f;
   transition: color 0.5s ease-in, text-shadow 0.5s ease-out;
 }
 
 .site-logo > small {
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 20px;
+  line-height: 28px;
+  color: #cd1811;
 }
 
 a.site-logo:hover {
@@ -58,7 +60,7 @@ nav a:hover {
 }
 
 main {
-  width: 960px;
+  width: 1080px;
   margin: 0 auto;
 }
 
@@ -77,73 +79,4 @@ footer > p {
   color: #93D7B7;
   text-align: center;
   padding: 1rem 0;
-}
-
-.form-field {
-  padding: 0.5rem 1rem;
-}
-
-.form-field > label {
-  display: block;
-}
-
-.form-error {
-  color: red;
-  font-weight: 700;
-}
-
-.field-error {
-  font-size: 12px;
-  font-weight: 500;
-  color: #cd1811;
-}
-
-.field-help {
-  font-size: 12px;
-  color: #434343;
-  font-weight: 400;
-}
-
-.messages {
-  margin-top: 1rem;
-}
-
-.messages > .message.warning {
-  border: 1px solid yellow;
-  background-color: orange;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.paginated-list {
-  display: flex;
-  justify-content: center;
-  list-style: none outside none;
-  margin: 0;
-  padding: 0;
-}
-
-.paginated-list > li > a {
-  border: 1px solid black;
-  text-decoration: none;
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  margin-right: 0.5rem;
-  cursor: pointer;
-}
-
-.paginated-list > li > a:hover {
-  background-color: #f0f0f0;
-}
-
-.paginated-list > li > span {
-  display: inline-block;
-  color: gray;
-  padding: 0.25rem 0.5rem;
-  margin-right: 0.5rem;
-  cursor: not-allowed;
-}
-
-.paginated-list > li:last-child > a {
-  margin-right: 0;
 }

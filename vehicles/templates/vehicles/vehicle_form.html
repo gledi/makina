@@ -1,47 +1,21 @@
 {% extends 'base.html' %}
 
+{% load i18n crispy_forms_tags %}
+
 {% block content %}
 {% if vehicle %}
-<h1>Edit <small>{{ vehicle }}</small></h1>
+<h1 class="title">{% translate 'Edit' %} <small>{{ vehicle }}</small></h1>
 {% else %}
-<h1>Add new Vehicle</h1>
+<h1 class="title">{% translate 'Add new Vehicle' %}</h1>
 {% endif %}
 
 <form action="" method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
-  {% for error in form.non_field_errors %}
-  <div class="form-error">
-    {{ error }}
-  </div>
-  {% endfor %}
-  {% for field in form %}
-  <div class="form-field">
-    {{ field.label_tag }}
-    {{ field }}
-    {% if field.help_text %}
-    <div class="field-help">{{ field.help_text }}</div>
-    {% endif %}
-    {% if field.errors %}
-      {% for error in field.errors %}
-      <div class="field-error">{{ error }}</div>
-      {% endfor %}
-    {% endif %}
-  </div>
-  {% endfor %}
-  <table>
-    <tbody>
-      {{ formset.as_table }}
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>
-          <button type="button">+</button>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+  {% crispy form %}
+  {% crispy formset %}
+
   <div class="form-actions">
-    <button type="submit">Save</button>
+    <button type="submit" class="button is-primary">Save</button>
   </div>
 </form>
 {% endblock content %}

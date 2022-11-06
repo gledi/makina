@@ -3,9 +3,9 @@
 {% block title %}{{ post.title }} - {{ block.super }}{% endblock title %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<div>
-    <a href="/posts/">Back to posts</a>
+<div class="is-flex is-justify-content-space-between is-align-items-center">
+  <h1 class="title">{{ post.title }}</h1>
+  <a class="button is-link" href="{% url 'post-list' %}">Back to posts</a>
 </div>
 <p>
     Published on: <em>{{ post.published_on }}</em>,

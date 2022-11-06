@@ -11,7 +11,6 @@ class RegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=128, required=True)
     last_name = forms.CharField(max_length=128, required=True)
     email = forms.EmailField(max_length=255, required=True)
-    telno = forms.CharField(max_length=32, required=False)
     username = forms.CharField(max_length=128, required=True)
     password = forms.CharField(
         max_length=128, min_length=8, required=True, widget=forms.PasswordInput
@@ -35,8 +34,9 @@ class RegistrationForm(forms.Form):
         return password
 
     def clean(self):
-        password = self.cleaned_data.get("password")
-        password_confirm = self.cleaned_data.get("password_confirm")
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
         if password is None or password_confirm != password:
             raise ValidationError("Passwords don't match")
-        return self.cleaned_data
+        return cleaned_data
