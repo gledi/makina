@@ -27,9 +27,9 @@
       </button>
       <button class="button is-white card-footer-item purchase" data-product="{{ product.pk }}" data-price="{{ product.price_id }}">
         <span class="icon purchase">
-          <i class="fas fa-cart-shopping purchase"></i>
+          <i class="fas fa-cart-plus purchase"></i>
         </span>
-        <span class="purchase">Purchase</span>
+        <span class="purchase">Add to Cart</span>
       </button>
     </footer>
   </div>
@@ -52,6 +52,7 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script>
 const configUrl = "{% url 'product-stripe-config' %}";
+const addToCartUrl = "{% url 'product-add-cart' %}";
 const checkoutSessionUrl = "{% url 'checkout-session' %}";
 </script>
 <script src="{% static 'shop/scripts/main.js' %}"></script>

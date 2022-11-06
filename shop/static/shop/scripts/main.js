@@ -17,10 +17,24 @@ window.addEventListener("load", async ev => {
 
       const priceId = elem.dataset.price;
       const productId = elem.dataset.product;
+      const quantity = 1;
 
-      const resp = await fetch(`${checkoutSessionUrl}?productId=${productId}`);
+      const resp = await fetch(addToCartUrl, {
+        method: 'POST',
+        body: JSON.stringify({product_id: productId, quantity: quantity}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       const data = await resp.json();
-      return stripe.redirectToCheckout({sessionId: data.sessionId})
+
+      const itemsCountElem = document.querySelector("#cart-items-count");
+      itemsCountElem.innerText = data.total_items;
+
+
+      // const resp = await fetch(`${checkoutSessionUrl}?productId=${productId}`);
+      // const data = await resp.json();
+      // return stripe.redirectToCheckout({sessionId: data.sessionId});
     }
   });
 });
