@@ -14,13 +14,9 @@ from django.views.generic import (
     DeleteView,
 )
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import (
-    login_required,
-    permission_required,
-    user_passes_test,
-)
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
@@ -29,7 +25,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import Vehicle, Photo
+from .models import Vehicle
 from .forms import VehicleForm, PhotoFormSet
 from .serializers import VehicleSerializer
 
