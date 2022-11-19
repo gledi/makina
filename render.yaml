@@ -14,6 +14,8 @@ services:
         fromDatabase:
           name: makinat
           property: connectionString
+      - key: PYTHON_VERSION
+        value: 3.11.0
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
