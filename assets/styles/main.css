@@ -59,11 +59,6 @@ nav a:hover {
   color: #44b78b;
 }
 
-main {
-  width: 1080px;
-  margin: 0 auto;
-}
-
 body > footer {
   position: sticky;
   top: 100vh;
