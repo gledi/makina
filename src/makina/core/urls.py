@@ -1,16 +1,15 @@
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib import admin
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("users.urls")),
-    path("", include("pages.urls")),
-    path("shop/", include("shop.urls")),
-    path("vehicles/", include("vehicles.urls")),
-    path("posts/", include("blog.urls")),
+    path("accounts/", include("makina.users.urls")),
+    path("", include("makina.pages.urls")),
+    path("shop/", include("makina.shop.urls")),
+    path("vehicles/", include("makina.vehicles.urls")),
+    path("posts/", include("makina.blog.urls")),
 ]
 
 

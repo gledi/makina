@@ -1,4 +1,6 @@
 {
+    "python.analysis.autoFormatStrings": true,
+    "black-formatter.importStrategy": "fromEnvironment",
     "[python]": {
         "editor.formatOnSave": true
     }

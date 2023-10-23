@@ -1,104 +1,91 @@
-.PHONY: check venv list outdated tools compile sync install install-dev dev \
-	prep-run run cleanup-containers cleanup-volumes cleanup shellplus \
-	image image-prod build up down destroy ps top start stop logs shell djshell test
+.PHONY: info venv list outdated tools compile compile/dry sync sync/dry install install-dev dev \
+	run shellplus \
+	img-dev img-prod img \
+	build up svc infrastructure down destroy ps top start stop logs shell djshell
 
 .SILENT: check venv prep-run
 
-SHELL := /bin/bash
 
-cache = 1
-debug = 0
-
-PY_VERSION = 3.12
-PYENV_PREFIX = $(shell pyenv prefix $(PY_VERSION))
+ARCH = $(shell uname -m)
+PLATFORM =
+PYENV_PREFIX = $(shell pyenv prefix 3.12)
 PYENV_PYTHON_BIN = $(PYENV_PREFIX)/bin/python
-VENV_DIR = .venv
-PYTHON = ./$(VENV_DIR)/bin/python
+VENV_DIR = $(CURDIR)/.venv
+VENV_PROMPT = makina
+PY = $(VENV_DIR)/bin/python
 REPOSITORY = gledi/makina
-TAG = develop
 SVC = web
-REQUIREMENTS = dev
 CMD = bash
 
-ifeq ($(cache), 0)
-	NO_CACHE = --no-cache
+ifeq ($(ARCH),arm64)
+	PLATFORM = --platform linux/amd64
 endif
 
-
-check:
-	echo "PY_VERSION =" $(PY_VERSION)
+info:
 	echo "PYENV_PREFIX =" $(PYENV_PREFIX)
-	echo "VENV_DIR =" $(VENV_DIR)
 	echo "PYENV_PYTHON_BIN =" $(PYENV_PYTHON_BIN)
+	echo "VENV_DIR =" $(VENV_DIR)
+	echo "VENV_PROMPT =" $(VENV_PROMPT)
+	echo "PY =" $(PY)
 	echo "REPOSITORY =" $(REPOSITORY)
 	echo "TAG =" $(TAG)
 	echo "SVC =" $(SVC)
 	echo "CMD =" $(CMD)
-	echo "NO_CACHE =" $(NO_CACHE)
-	echo "REQUIREMENTS =" $(REQUIREMENTS)
+
+t:
+	@echo $(ARCH)
+	@echo "PLATFORM = $(PLATFORM)"
 
 venv:
-	if ! [[ -d $(VENV_DIR) ]]; then $(PYENV_PYTHON_BIN) -m venv --prompt=makina $(VENV_DIR); else echo "$(VENV_DIR) already exists. skipping ..."; fi
+	if ! [[ -d $(VENV_DIR) ]]; then $(PYENV_PYTHON_BIN) -m venv --prompt=$(VENV_PROMPT) $(VENV_DIR); else echo "$(VENV_DIR) already exists. skipping ..."; fi
 
 list:
-	$(PYTHON) -m pip list
+	$(PY) -m pip list
 
 outdated:
-	$(PYTHON) -m pip list --outdated
+	$(PY) -m pip list --outdated
 
 tools:
-	$(PYTHON) -m pip install --upgrade --upgrade-strategy=eager pip setuptools wheel pip-tools
+	$(PY) -m pip install --upgrade --upgrade-strategy=eager pip pip-tools
 
 compile:
-	$(PYTHON) -m piptools compile --resolver=backtracking --upgrade --extra=prod --output-file requirements/prod.txt
-	$(PYTHON) -m piptools compile --resolver=backtracking --upgrade --all-extras --output-file requirements/dev.txt
+	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --extra=prod --output-file requirements/prod.txt
+	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --all-extras --output-file requirements/dev.txt
+
+compile/dry:
+	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --extra=prod --output-file requirements/prod.txt
+	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --all-extras --output-file requirements/dev.txt
 
 sync:
-	$(PYTHON) -m piptools sync requirements/$(REQUIREMENTS).txt
+	$(PY) -m piptools sync requirements/dev.txt
+
+sync/dry:
+	$(PY) -m piptools sync --dry-run requirements/dev.txt
 
 install:
-	$(PYTHON) -m pip install --no-deps .
+	$(PY) -m pip install --no-deps .
 
 install-dev:
-	$(PYTHON) -m pip install --no-deps --editable '.[dev]'
+	$(PY) -m pip install --no-deps --editable '.[prod,test,dev]'
 
 dev: tools compile sync install-dev
-
-prep-run:
-	if [[ "$(shell docker ps -aq --filter name=makina-cache)" != "" ]]; then \
-		docker rm -f makina-cache; \
-	fi
-	if [[ "$(shell docker ps -aq --filter name=makina-db)" != "" ]]; then \
-		docker rm -f makina-db; \
-	fi
-	if [[ "$(shell docker volume ls --filter name=makina-dbdata)" == "" ]]; then \
-		docker volume create makina-dbdata; \
-	fi
-	docker run --rm --name=makina-cache -p 6379:6379 -d redis:7.2-alpine
-	docker run --rm --name=makina-db -p 5432:5432 -v makina-dbdata:/var/lib/postgresql/data -e PGTZ=UTC -e POSTGRES_USER=makina -e POSTGRES_PASSWORD=anikam -e POSTGRES_DB=makina -d postgres:16-alpine
 
 run:
 	makina runserver
 
-cleanup-containers:
-	docker stop makina-cache makina-db
-
-cleanup-volumes:
-	docker volume rm makina-dbdata
-
-cleanup: cleanup-containers cleanup-volumes
-
 shellplus:
 	makina shell_plus
 
-image:
-	docker build --tag $(REPOSITORY):$(TAG) --force-rm $(NO_CACHE) .
+img-dev:
+	docker build $(PLATFORM) --tag $(REPOSITORY):dev --force-rm .
 
-image-prod:
-	docker build --tag $(REPOSITORY):prod --tag $(REPOSITORY):latest --force-rm $(NO_CACHE) .
+img-prod:
+	docker build $(PLATFORM) --tag $(REPOSITORY):prod --tag $(REPOSITORY):latest --force-rm .
+
+img: img-prod
 
 build:
-	docker compose build $(NO_CACHE)
+	docker compose build
 
 up:
 	docker compose up --build -d
@@ -129,6 +116,3 @@ shell:
 
 djshell:
 	docker compose exec web python manage.py shell_plus
-
-test:
-	docker compose run --rm web python -m pytest -v

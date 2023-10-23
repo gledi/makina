@@ -1,28 +1,39 @@
-version: '3.9'
-
 services:
   app:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: sda/makina
+      target: dev-runtime
+    image: sda/makina:dev
+    platform: linux/amd64
     container_name: makina-app
     ports:
       - "8000:8000"
-    volumes:
-      - .:/usr/src/app
-  db:
-    image: postgres:15-alpine
     environment:
+      - RUNNING_IN_DOCKER=true
+      - DJANGO_SETTINGS_MODULE=makinat.settings.dev
+      - DEBUG=true
+      - SECRET_KEY=SuperDuperSecretKey
+      - DATABASE_URL=postgres://dontdrink:anddrive@db:5432/makinat?encoding=utf-8
+      - STRIPE_PUBLISHABLE_KEY=pk_test_51Jw774LmYIXXKBgS40qd7YI2c3no8bGZyGTjkO13uQxLT30DluL0FtAiP9NFEdTgmvAsMqo4d5mOYHQQ9ECTbf0M00Hqmw8Tqw
+      - STRIPE_SECRET_KEY=sk_test_51Jw774LmYIXXKBgSc9vLE8zLUCBIA9PfynBv9Nq1k5Cugad2CKuXN3Ozcju5exC3GGBDcfiUXjoQ7e1qSFgP02Ae00kaxly7ob
+    volumes:
+      - /app/.venv
+      - .:/app
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - TZ=UTC
+      - PGTZ=UTC
       - POSTGRES_DB=makinat
-      - POSTGRES_USER=driver
-      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=dontdrink
+      - POSTGRES_PASSWORD=anddrive
     container_name: makina-db
     ports:
       - "15432:5432"
     volumes:
-      - makina-db-data:/var/lib/postgresql/data
-
+      - db-data:/var/lib/postgresql/data
 
 volumes:
-  makina-db-data:
+  db-data:

@@ -1,34 +1,24 @@
-import os
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
 from environs import Env
 
 env = Env()
-env.read_env()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ROOT_DIR = BASE_DIR.parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = []
-RENDER_EXTERNAL_HOSTNAME = env.str("RENDER_EXTERNAL_HOSTNAME", default="")
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # django builtin apps
+    # django builtins
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,15 +29,14 @@ INSTALLED_APPS = [
     # 3rd party apps
     "rest_framework",
     "crispy_forms",
-    "crispy_bulma",
-    "fontawesomefree",
+    "crispy_bootstrap5",
     "imagekit",
     # local apps
-    "pages",  # "pages.apps.PagesConfig"
-    "vehicles",  # "vehicles.apps.VehiclesConfig"
-    "blog",
-    "users",
-    "shop",
+    "makina.pages",
+    "makina.vehicles",
+    "makina.blog",
+    "makina.users",
+    "makina.shop",
 ]
 
 MIDDLEWARE = [
@@ -61,7 +50,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "core.urls"
+ROOT_URLCONF = "makina.core.urls"
 
 TEMPLATES = [
     {
@@ -80,17 +69,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
+WSGI_APPLICATION = "makina.core.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {"default": env.dj_db_url("DATABASE_URL")}
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -108,14 +90,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = "en"
 LANGUAGES = [
-    ("en", "English"),
-    ("it", "Italian"),
-    ("sq", "Albanian"),
+    ("en-US", _("English (US)")),
+    ("sq-AL", _("Albanian")),
+    ("it-IT", _("Italian")),
 ]
 LOCALE_PATHS = [BASE_DIR / "locales"]
 USE_I18N = True
@@ -124,41 +103,26 @@ TIME_ZONE = "UTC"
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = ROOT_DIR / "static"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "assets"]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
-if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+MEDIA_ROOT = ROOT_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 AUTH_USER_MODEL = "users.User"
 
-
+LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "registration@makina.al"
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
-CRISPY_TEMPLATE_PACK = "bulma"
-
-if DEBUG:
-    INSTALLED_APPS.extend(["debug_toolbar", "django_extensions"])
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ["127.0.0.1"]
-
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bootstrap5",)
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 LOGGING = {
     "version": 1,
@@ -173,7 +137,6 @@ LOGGING = {
         "level": "INFO" if DEBUG else "WARNING",
     },
 }
-
 
 STRIPE_PUBLISHABLE_KEY = env.str("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = env.str("STRIPE_SECRET_KEY")

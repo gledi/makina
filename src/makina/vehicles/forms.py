@@ -1,10 +1,9 @@
-import re
 import datetime
+import re
 
 from django import forms
 
 from .models import Photo, Vehicle
-
 
 re_personal_no = re.compile(r"^[A-Z][0-9]{8}[A-Z]$")
 
@@ -32,7 +31,7 @@ class StudentForm(forms.Form):
 class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
-        fields = [
+        fields = (
             "make",
             "model",
             "description",
@@ -44,7 +43,7 @@ class VehicleForm(forms.ModelForm):
             "kind",
             "km",
             "color",
-        ]
+        )
 
     def clean(self):
         data = self.cleaned_data

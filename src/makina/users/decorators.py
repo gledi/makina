@@ -1,6 +1,7 @@
 from functools import wraps
-from django.http import HttpResponseRedirect
+
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 
 def anonymous_required(view_func):

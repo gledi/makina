@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Vehicle, Photo
+from .models import Photo, Vehicle
 
 
 class PhotoInline(admin.TabularInline):
@@ -9,15 +9,13 @@ class PhotoInline(admin.TabularInline):
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "make",
         "model",
         "year",
         "transmission",
-    ]
-    list_editable = ["year", "transmission"]
-    list_filter = ["year", "transmission"]
-    inlines = [PhotoInline]
+    )
+    list_editable = ("year", "transmission")
+    list_filter = ("year", "transmission")
+    inlines = (PhotoInline,)
 
-
-# admin.site.register(Vehicle, VehicleAdmin)
