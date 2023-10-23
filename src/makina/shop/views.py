@@ -1,14 +1,13 @@
 import json
 
-from django.http import JsonResponse, HttpRequest
+import stripe
 from django.conf import settings
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest, JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.reverse import reverse
-import stripe
 
-from shop.cart import Cart
-
+from .cart import Cart
 from .models import Product
 
 
@@ -17,16 +16,16 @@ def get_product_list(request):
     return render(request, "shop/product_list.html", context={"products": products})
 
 
-def get_stripe_config(request):
+def get_stripe_config(request) -> JsonResponse:
     if request.method == "GET":
         return JsonResponse({"publicKey": settings.STRIPE_PUBLISHABLE_KEY})
+    return JsonResponse({"message": "Method not allowed"}, status=405)
 
 
 @csrf_exempt
 def add_product_to_cart(request: HttpRequest):
     if request.method == "POST":
         data = json.loads(request.body)
-        print(data)
         cart = Cart(request.session)
         cart.add(**data)
         return JsonResponse(
@@ -62,7 +61,7 @@ def create_checkout_session(request):
             ],
         )
         return JsonResponse({"sessionId": checkout_session["id"]})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return JsonResponse({"error": str(e)})
 
 

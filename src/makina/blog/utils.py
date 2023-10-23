@@ -6,7 +6,7 @@ from .models import Post
 def generate_fake_posts(num: int = 10) -> list[Post]:
     fake = Faker()
     posts = []
-    for i in range(num):
+    for _ in range(num):
         is_published = fake.pybool()
         post = Post(
             title=fake.sentence()[:-1],

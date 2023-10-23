@@ -1,12 +1,107 @@
--r main.txt
+argon2-cffi==23.1.0       # via django
+argon2-cffi-bindings==21.2.0  # via argon2-cffi
+asgiref==3.8.1            # via channels, channels-redis, daphne, django
+asttokens==2.4.1          # via stack-data
+attrs==23.2.0             # via automat, service-identity, twisted
+autobahn==23.6.2          # via daphne
+automat==22.10.0          # via twisted
+autopep8==2.2.0           # via django-silk
+black==24.4.2             # via makina (pyproject.toml)
+brotli==1.1.0             # via whitenoise
+certifi==2024.2.2         # via requests
+cffi==1.16.0              # via argon2-cffi-bindings, cryptography
+channels[daphne]==4.1.0   # via channels-redis, makina (pyproject.toml)
+channels-redis==4.2.0     # via makina (pyproject.toml)
+charset-normalizer==3.3.2  # via requests
+click==8.1.7              # via black
+constantly==23.10.4       # via twisted
+coverage[toml]==7.5.3     # via pytest-cov
+crispy-bootstrap5==2024.2  # via makina (pyproject.toml)
+cryptography==42.0.7      # via autobahn, pyopenssl, service-identity
+daphne==4.1.2             # via channels, makina (pyproject.toml)
+debugpy==1.8.1            # via makina (pyproject.toml)
+decorator==5.1.1          # via ipython
+dj-database-url==2.2.0    # via makina (pyproject.toml)
+django[argon2]==4.2.13    # via channels, crispy-bootstrap5, dj-database-url, django-appconf, django-crispy-forms, django-debug-toolbar, django-extensions, django-filter, django-quill-editor, django-redis, django-silk, django-taggit, djangorestframework, makina (pyproject.toml), model-bakery
+django-appconf==1.0.6     # via django-imagekit
+django-crispy-forms==2.1  # via crispy-bootstrap5, makina (pyproject.toml)
+django-debug-toolbar==4.4.2  # via makina (pyproject.toml)
+django-extensions==3.2.3  # via makina (pyproject.toml)
+django-filter==24.2       # via makina (pyproject.toml)
+django-hashids==0.7.0     # via makina (pyproject.toml)
+django-imagekit==5.0.0    # via makina (pyproject.toml)
+django-quill-editor==0.1.40  # via makina (pyproject.toml)
+django-redis==5.4.0       # via makina (pyproject.toml)
+django-silk==5.1.0        # via makina (pyproject.toml)
+django-taggit==5.0.1      # via makina (pyproject.toml)
+django-types==0.19.1      # via makina (pyproject.toml)
+djangorestframework==3.15.1  # via makina (pyproject.toml)
+environs==11.0.0          # via makina (pyproject.toml)
+executing==2.0.1          # via stack-data
+faker==25.3.0             # via makina (pyproject.toml)
+gprof2dot==2022.7.29      # via django-silk
+graphviz==0.20.3          # via makina (pyproject.toml)
+h2==4.1.0                 # via twisted
+hashids==1.3.1            # via django-hashids
+hiredis==2.3.2            # via makina (pyproject.toml)
+hpack==4.0.0              # via h2
+hyperframe==6.0.1         # via h2
+hyperlink==21.0.0         # via autobahn, twisted
+idna==3.7                 # via hyperlink, requests, twisted
+incremental==22.10.0      # via twisted
+iniconfig==2.0.0          # via pytest
+ipython==8.25.0           # via makina (pyproject.toml)
+jedi==0.19.1              # via ipython
+marshmallow==3.21.2       # via environs
+matplotlib-inline==0.1.7  # via ipython
+mistune==3.0.2            # via makina (pyproject.toml)
+model-bakery==1.18.0      # via makina (pyproject.toml)
+msgpack==1.0.8            # via channels-redis
+mypy-extensions==1.0.0    # via black
+packaging==24.0           # via black, marshmallow, pytest
+parso==0.8.4              # via jedi
+pathspec==0.12.1          # via black
+pexpect==4.9.0            # via ipython
+pilkit==3.0               # via django-imagekit
+pillow==10.3.0            # via makina (pyproject.toml), pilkit
+platformdirs==4.2.2       # via black
+pluggy==1.5.0             # via pytest
+priority==1.3.0           # via twisted
+prompt-toolkit==3.0.45    # via ipython
+psycopg[c,pool]==3.1.19   # via makina (pyproject.toml)
+psycopg-c==3.1.19         # via psycopg
+psycopg-pool==3.2.2       # via psycopg
+ptyprocess==0.7.0         # via pexpect
+pure-eval==0.2.2          # via stack-data
+pyasn1==0.6.0             # via pyasn1-modules, service-identity
+pyasn1-modules==0.4.0     # via service-identity
+pycodestyle==2.11.1       # via autopep8
+pycparser==2.22           # via cffi
+pygments==2.18.0          # via ipython, makina (pyproject.toml)
+pyopenssl==24.1.0         # via twisted
+pytest==8.2.1             # via makina (pyproject.toml), pytest-cov, pytest-django
+pytest-cov==5.0.0         # via makina (pyproject.toml)
+pytest-django==4.8.0      # via makina (pyproject.toml)
+python-dateutil==2.9.0.post0  # via faker
+python-dotenv==1.0.1      # via environs
+redis==5.0.4              # via channels-redis, django-redis, makina (pyproject.toml)
+requests==2.32.3          # via makina (pyproject.toml), stripe
+ruff==0.4.7               # via makina (pyproject.toml)
+service-identity==24.1.0  # via twisted
+six==1.16.0               # via asttokens, automat, python-dateutil
+sqlparse==0.5.0           # via django, django-debug-toolbar, django-silk
+stack-data==0.6.3         # via ipython
+stripe==9.9.0             # via makina (pyproject.toml)
+traitlets==5.14.3         # via ipython, matplotlib-inline
+twisted[http2,tls]==24.3.0  # via daphne, makina (pyproject.toml)
+txaio==23.1.1             # via autobahn
+types-psycopg2==2.9.21.20240417  # via django-types
+types-requests==2.32.0.20240523  # via makina (pyproject.toml)
+typing-extensions==4.12.0  # via dj-database-url, psycopg, psycopg-pool, stripe, twisted
+urllib3==2.2.1            # via requests, types-requests
+wcwidth==0.2.13           # via prompt-toolkit
+whitenoise[brotli]==6.6.0  # via makina (pyproject.toml)
+zope-interface==6.4.post2  # via twisted
 
-django-extensions==3.2.1
-django-debug-toolbar==3.7.0
-black==22.10.0
-flake8==5.0.4
-ipython==8.6.0
-faker==15.2.0
-pytest==7.2.0
-pytest-django==4.5.2
-pytest-mock==3.10.0
-model-bakery==1.9.0
+# The following packages are considered to be unsafe in a requirements file:
+setuptools==70.0.0        # via autobahn, zope-interface

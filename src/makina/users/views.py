@@ -1,18 +1,18 @@
 import secrets
 
 from django.conf import settings
-from django.db import transaction
-from django.template.loader import render_to_string
-from django.shortcuts import render, redirect, resolve_url, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db import transaction
+from django.shortcuts import get_object_or_404, redirect, render, resolve_url
+from django.template.loader import render_to_string
+from django.utils.translation import gettext as _
 
-from .models import Registration
 from .decorators import anonymous_required
 from .forms import RegistrationForm
-
+from .models import Registration
 
 User = get_user_model()
 
@@ -53,8 +53,8 @@ def register(request):
             )
             messages.info(
                 request,
-                "Registration successful. "
-                "Please check your email for further instructions.",
+                _("Registration successful. "
+                "Please check your email for further instructions."),
             )
             return redirect("/")
     else:
@@ -73,5 +73,5 @@ def registration_activate(request, key):
     registration.save()
     registration.user.is_active = True
     registration.user.save()
-    messages.success(request, "Your account has been activated. You can login now.")
+    messages.success(request, _("Your account has been activated. You can try to login now."))
     return redirect(settings.LOGIN_URL)

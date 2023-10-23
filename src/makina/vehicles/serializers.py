@@ -6,7 +6,7 @@ from .models import Vehicle
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
-        fields = [
+        fields = (
             "id",
             "make",
             "model",
@@ -21,4 +21,4 @@ class VehicleSerializer(serializers.ModelSerializer):
             "color",
             "created_at",
             "updated_at",
-        ]
+        )
