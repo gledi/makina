@@ -8,22 +8,25 @@
   <div>
     <a href="{% url 'vehicle-add' %}" class="button is-primary">Add new Vehicle</a>
     {% if perms.vehicles.publish_vehicle %}
-    |
     <a href="{% url 'vehicle-manage' %}" class="button is-warning">Manage Vehicles</a>
     {% endif %}
   </div>
 </div>
 <div>
   <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-    <a class="pagination-previous">{% translate 'Previous' %}</a>
-    <a class="pagination-next">{% translate 'Next' %}</a>
+    <a class="pagination-previous" href="">{% translate 'Previous' %}</a>
+    <a class="pagination-next" href="">{% translate 'Next' %}</a>
     <ul class="pagination-list">
       {% for page in pages %}
       <li>
         {% if page == paginator.ELLIPSIS %}
         <span class="pagination-ellipsis">{{ page }}</span>
         {% else %}
-        <a class="pagination-link{% if page == page_obj.number %} is-current{% endif %}" href="?page={{ page }}">{{ page }}</a>
+        <a
+          class="pagination-link{% if page == page_obj.number %} is-current{% endif %}"
+          href="?page={{ page }}"
+          aria-label="{% if page == page_obj.number %}{% translate 'Page' %} {{ page }}{% else %}{% translate 'Goto page' %} {{ page }}{% endif %}"
+          >{{ page }}</a>
         {% endif %}
       </li>
       {% endfor %}
@@ -31,6 +34,10 @@
   </nav>
 </div>
 {% for vehicle in vehicles %}
-<p><a href="{% url 'vehicle-detail' pk=vehicle.pk %}">{{ vehicle }}</a></p>
+<p>
+  <a href="{% url 'vehicle-detail' pk=vehicle.pk %}">{{ vehicle }}</a>
+</p>
+{% empty %}
+<p>{% translate 'No vehicles available' %}</p>
 {% endfor %}
 {% endblock content %}

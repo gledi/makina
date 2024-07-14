@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% load i18n %} {% block content %}
+<div
+  class="is-flex is-justify-content-space-between is-align-content-center py-4"
+>
+  <h1 class="title is-1">{% translate "Shopping Cart" %}</h1>
+  <h3 class="subtitle is-3 has-text-weight-semibold">
+    {{ cart.total_items }} {% translate 'Items' %}
+  </h3>
+</div>
+<section class="is-flex is-flex-direction-column">
+  <div class="columns">
+    <div class="column has-border-b"></div>
+    <div class="column is-half has-text-weight-semibold has-border-b">
+      {% translate 'Product' %}
+    </div>
+    <div class="column has-text-weight-semibold has-border-b">
+      {% translate 'Quantity' %}
+    </div>
+    <div class="column has-text-weight-semibold has-border-b">
+      {% translate 'Price' %}
+    </div>
+    <div class="column has-text-weight-semibold has-border-b">
+      {% translate 'Total' %}
+    </div>
+    <div class="column has-border-b"></div>
+  </div>
+  {% for item in cart %}
+  <article class="columns">
+    <div class="column">
+      <figure class="image">
+        <img
+          src="{{ item.product.photo_thumb.url }}"
+          alt="{{ item.product.name }}"
+          width="120"
+          height="90"
+        />
+      </figure>
+    </div>
+    <div class="column is-half">
+      <h3 class="subtitle mb-0">{{ item.product.name }}</h3>
+      <p>{{ item.product.description|truncatewords:"20" }}</p>
+    </div>
+    <div class="column">
+      <input
+        type="number"
+        class="input is-primary"
+        value="{{ item.quantity }}"
+      />
+    </div>
+    <div class="column">
+      <p>€ {{ item.product.price }}</p>
+    </div>
+    <div class="column">
+      <p>€ {{ item.total_price }}</p>
+    </div>
+    <div class="column">
+      <button class="button is-danger">
+        <span class="icon">
+          <i class="fa-solid fa-trash"></i>
+        </span>
+      </button>
+    </div>
+  </article>
+  {% empty %}
+  <div class="column is-full">
+    <article class="message is-warning">
+      <div class="message-body">{% translate "Your cart is empty" %}</div>
+    </article>
+  </div>
+  {% endfor %}
+  <div class="columns">
+    <div class="column"></div>
+    <div class="column is-half"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column has-text-weight-semibold has-border-t">
+      <p>€ {{ cart.total_price }}</p>
+    </div>
+    <div class="column has-border-t">
+      <button type="button" class="button is-danger">
+        {% translate 'Clear' %}
+      </button>
+    </div>
+  </div>
+</section>
+{% endblock content %}

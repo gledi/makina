@@ -10,14 +10,14 @@ authors = [
 description = "Marketplace for buying/selling cars and other motorvehicles"
 dynamic = ["version"]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 license = { text = "MIT" }
-keywords = ["marketplace", "cars", "buying", "selling"]
+keywords = ["marketplace", "cars", "vehicles", "buying", "selling"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
@@ -28,12 +28,12 @@ classifiers = [
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
 ]
 dependencies = [
-  "django[argon2]<5.0",
+  "django[argon2]",
   "environs",
   "dj-database-url",
   "djangorestframework",
   "django-crispy-forms",
-  "crispy-bootstrap5",
+  "crispy-bulma",
   "pillow",
   "django-imagekit",
   "django-taggit",
@@ -51,6 +51,7 @@ dependencies = [
   "channels[daphne]",
   "channels-redis",
   "stripe",
+  "fontawesomefree",
 ]
 
 [project.optional-dependencies]
@@ -65,8 +66,6 @@ dev = [
   "ruff",
   "black",
   "graphviz",
-  "types-requests",
-  "django-types",
 ]
 
 [project.scripts]
@@ -132,15 +131,6 @@ docstring-quotes = "double"
 known-first-party = ["makina"]
 known-third-party = ["django"]
 
-[tool.black]
-target-version = ['py312']
-extend-exclude = '(.*\/migrations\/)'
-
-[tool.pycln]
-all = true
-verbose = true
-extend_exclude = "(settings/|migrations/|__init__.py|_version.py)"
-
 [tool.pytest.ini_options]
 pythonpath = ["makina"]
 python_files = ["test_*.py", "*_tests.py"]
@@ -168,14 +158,6 @@ omit = [
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
-
-[tool.pyright]
-include = ["src"]
-pythonVersion = "3.12"
-venvPath = "."
-venv = ".venv"
-reportMissingImports = true
-reportMissingTypeStubs = false
 
 [tool.tbump.version]
 current = "0.1.0b2"

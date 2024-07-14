@@ -16,7 +16,7 @@ class Vehicle(models.Model):
 
     class Kind(models.TextChoices):
         SEDAN = "sedan", _("Sedan")
-        COUPET = "coupet", _("Coupet")
+        COUPET = "coupe", _("Coupe")
         HATCHBACK = "hatchback", _("Hatchback")
         SUV = "suv", _("SUV")
         TRUCK = "truck", _("Truck")
@@ -45,9 +45,7 @@ class Vehicle(models.Model):
         db_table = "vehicles"
         verbose_name = _("vehicle")
         verbose_name_plural = _("vehicles")
-        permissions = (
-            ("publish_vehicle", "Can publish vehicle"),
-        )
+        permissions = (("publish_vehicle", "Can publish vehicle"),)
 
     def __str__(self) -> str:
         return f"{self.year} {self.make} {self.model} {self.get_transmission_display()}/{self.fuel}"

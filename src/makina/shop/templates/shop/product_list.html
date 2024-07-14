@@ -5,7 +5,7 @@
 <h1 class="title">{% translate "Products" %}</h1>
 <div id="product-list" class="is-flex is-justify-content-space-between">
   {% for product in products %}
-  <div class="card">
+  <div class="card" style="max-width: 47.5%">
     <div class="card-image">
       <figure class="image">
         <img src="{{ product.photo_md.url }}" alt="{{ product.name }}" width="480" height="360">
@@ -51,9 +51,9 @@
 {{ block.super }}
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-const configUrl = "{% url 'product-stripe-config' %}";
-const addToCartUrl = "{% url 'product-add-cart' %}";
-const checkoutSessionUrl = "{% url 'checkout-session' %}";
+const configUrl = "{% url 'shop:product-stripe-config' %}";
+const addToCartUrl = "{% url 'shop:product-add-cart' %}";
+const checkoutSessionUrl = "{% url 'shop:checkout-session' %}";
 </script>
 <script src="{% static 'shop/scripts/main.js' %}"></script>
 {% endblock scripts %}

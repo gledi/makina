@@ -66,7 +66,7 @@ install:
 	$(PY) -m pip install --no-deps .
 
 install-dev:
-	$(PY) -m pip install --no-deps --editable '.[prod,test,dev]'
+	$(PY) -m pip install --no-deps --editable .
 
 dev: tools compile sync install-dev
 

@@ -2,6 +2,7 @@ import datetime
 import re
 
 from django import forms
+from crispy_forms.helper import FormHelper
 
 from .models import Photo, Vehicle
 
@@ -45,13 +46,29 @@ class VehicleForm(forms.ModelForm):
             "color",
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
     def clean(self):
         data = self.cleaned_data
         fuel = data.get("fuel")
         transmission = data.get("transmission")
-        if transmission == Vehicle.TRANSMISSION_MANUAL and fuel == Vehicle.ELECTRIC:
+        if (
+            transmission == Vehicle.Transmission.MANUAL
+            and fuel == Vehicle.Fuel.ELECTRIC
+        ):
             raise forms.ValidationError("Ska mundesi elektrik dhe manual")
         return data
 
 
 PhotoFormSet = forms.inlineformset_factory(Vehicle, Photo, fields=("picture",))
+
+
+class PhotoFormSetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.form_tag = False
+        self.disable_csrf = True

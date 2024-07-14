@@ -2,8 +2,11 @@ from django.urls import path
 
 from . import views
 
+app_name = "shop"
+
 urlpatterns = [
     path("", views.get_product_list, name="product-list"),
+    path("cart/", views.get_cart_details, name="cart"),
     path("config/", views.get_stripe_config, name="product-stripe-config"),
     path("add-to-cart/", views.add_product_to_cart, name="product-add-cart"),
     path("checkout/", views.create_checkout_session, name="checkout-session"),

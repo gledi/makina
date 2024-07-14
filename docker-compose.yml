@@ -11,12 +11,12 @@ services:
       - "8000:8000"
     environment:
       - RUNNING_IN_DOCKER=true
-      - DJANGO_SETTINGS_MODULE=makinat.settings.dev
+      - DJANGO_SETTINGS_MODULE=makina.core.settings.dev
       - DEBUG=true
-      - SECRET_KEY=SuperDuperSecretKey
-      - DATABASE_URL=postgres://dontdrink:anddrive@db:5432/makinat?encoding=utf-8
+      - SECRET_KEY=SuperDuperSecretK3Y
+      - DATABASE_URL=postgres://pilot:onawheel@db:5432/makina?encoding=utf-8
       - STRIPE_PUBLISHABLE_KEY=pk_test_51Jw774LmYIXXKBgS40qd7YI2c3no8bGZyGTjkO13uQxLT30DluL0FtAiP9NFEdTgmvAsMqo4d5mOYHQQ9ECTbf0M00Hqmw8Tqw
-      - STRIPE_SECRET_KEY=sk_test_51Jw774LmYIXXKBgSc9vLE8zLUCBIA9PfynBv9Nq1k5Cugad2CKuXN3Ozcju5exC3GGBDcfiUXjoQ7e1qSFgP02Ae00kaxly7ob
+      - STRIPE_SECRET_KEY=sk_test_51Jw774LmYIXXKBgSRbo66iQcdtPIsiLRixyxySWoYfdsdOE8LAh9MffV60Tjzf7G40FPF1HiKXnuWGxkAIwZU9Rn00GqYCwreg
     volumes:
       - /app/.venv
       - .:/app

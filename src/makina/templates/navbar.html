@@ -31,7 +31,7 @@
           <a class="navbar-link">{% translate 'More' %}</a>
           <div class="navbar-dropdown">
             <a class="navbar-item" href="">{% translate 'Careers' %}</a>
-            <a class="navbar-item" href="{% url 'product-list' %}">{% translate 'Gift Shop' %}</a>
+            <a class="navbar-item" href="{% url 'shop:product-list' %}">{% translate 'Gift Shop' %}</a>
             <hr class="navbar-divider" />
             <a class="navbar-item" href="">{% translate 'Report an issue' %}</a>
           </div>
@@ -41,13 +41,13 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <button href="" class="button is-info">
+            <a href="{% url 'shop:cart' %}" class="button is-info">
               <span class="icon">
                 <i class="fas fa-cart-shopping"></i>
               </span>
               <span>Cart</span>
               <span id="cart-items-count" class="badge is-top-right is-success">{{ cart_items_count }}</span>
-            </button>
+            </a>
             {% if user.is_authenticated %}
             <a class="button is-primary" href="{% url 'profile' %}">
               <span class="icon">
@@ -55,12 +55,15 @@
               </span>
               <strong>{{ user.username }}</strong>
             </a>
-            <a class="button is-link" href="{% url 'logout' %}">
-              <span class="icon">
-                <i class="fas fa-right-from-bracket"></i>
-              </span>
-              <span>{% translate 'Log out' %}</span>
-            </a>
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="button is-link">
+                <span class="icon">
+                  <i class="fas fa-right-from-bracket"></i>
+                </span>
+                <span>{% translate 'Log out' %}</span>
+              </button>
+            </form>
             {% else %}
             <a class="button is-primary" href="{% url 'login' %}">
               <span class="icon">

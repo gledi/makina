@@ -1,38 +1,35 @@
 import copy
 
+from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.http import (
     HttpRequest,
     HttpResponse,
     HttpResponseRedirect,
     JsonResponse,
 )
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-)
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-
-from rest_framework import views, status
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+from rest_framework import status, views
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
+from .forms import PhotoFormSet, PhotoFormSetHelper, VehicleForm
 from .models import Vehicle
-from .forms import VehicleForm, PhotoFormSet
 from .serializers import VehicleSerializer
 
 
 class VehicleListView(ListView):
-    # model = Vehicle
-    # queryset = Vehicle.objects.filter(is_published=True).all()
     context_object_name = "vehicles"
     paginate_by = 2
 
@@ -63,6 +60,7 @@ class VehicleDetailView(DetailView):
 
 @permission_required("vehicles.add_vehicle")
 def create_vehicle(request: HttpRequest) -> HttpResponse:
+    formset_helper = PhotoFormSetHelper()
     if request.method == "POST":
         form = VehicleForm(request.POST)
         formset = PhotoFormSet(request.POST, request.FILES)
@@ -79,7 +77,7 @@ def create_vehicle(request: HttpRequest) -> HttpResponse:
     return render(
         request,
         "vehicles/vehicle_form.html",
-        context={"form": form, "formset": formset},
+        context={"form": form, "formset": formset, "formset_helper": formset_helper},
     )
 
 

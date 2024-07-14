@@ -16,6 +16,11 @@ def get_product_list(request):
     return render(request, "shop/product_list.html", context={"products": products})
 
 
+def get_cart_details(request):
+    cart = Cart(request.session)
+    return render(request, "shop/cart.html", context={"cart": cart})
+
+
 def get_stripe_config(request) -> JsonResponse:
     if request.method == "GET":
         return JsonResponse({"publicKey": settings.STRIPE_PUBLISHABLE_KEY})
@@ -39,12 +44,12 @@ def create_checkout_session(request):
 
     product_id = int(request.GET.get("productId", "0"))
     if product_id == 0:
-        return JsonResponse({"error": "you did not buy a product"})
+        return JsonResponse({"error": "Chosen product does not exist"})
 
     product = get_object_or_404(Product, pk=product_id)
 
     success_url = reverse("payment-success", kwargs={"pk": product_id}, request=request)
-    cancel_url = reverse("payment-cancel", request=request)
+    cancel_url = reverse("payment-cancel", kwargs={"pk", product_id}, request=request)
 
     try:
         # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
@@ -70,5 +75,6 @@ def payment_success(request, pk):
     return render(request, "shop/payment_success.html", context={"product": product})
 
 
-def payment_cancel(request):
-    return render(request, "shop/payment_cancel.html")
+def payment_cancel(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    return render(request, "shop/payment_cancel.html", context={"product": product})

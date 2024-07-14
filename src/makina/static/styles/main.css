@@ -75,3 +75,15 @@ footer > p {
   text-align: center;
   padding: 1rem 0;
 }
+
+.has-border {
+  border: 1px solid #ccc;
+}
+
+.has-border-b {
+  border-bottom: 1px solid #ccc;
+}
+
+.has-border-t {
+  border-top: 1px solid #ccc;
+}
