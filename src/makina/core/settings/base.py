@@ -29,8 +29,9 @@ INSTALLED_APPS = [
     # 3rd party apps
     "rest_framework",
     "crispy_forms",
-    "crispy_bootstrap5",
+    "crispy_bulma",
     "imagekit",
+    "fontawesomefree",
     # local apps
     "makina.pages",
     "makina.vehicles",
@@ -63,7 +64,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "shop.context_processors.cart_total_items",
+                "makina.shop.context_processors.cart_total_items",
             ],
         },
     },
@@ -121,8 +122,8 @@ LOGOUT_REDIRECT_URL = "/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "registration@makina.al"
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = ("bootstrap5",)
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+CRISPY_TEMPLATE_PACK = "bulma"
 
 LOGGING = {
     "version": 1,

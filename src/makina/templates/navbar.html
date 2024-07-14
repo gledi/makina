@@ -55,12 +55,15 @@
               </span>
               <strong>{{ user.username }}</strong>
             </a>
-            <a class="button is-link" href="{% url 'logout' %}">
-              <span class="icon">
-                <i class="fas fa-right-from-bracket"></i>
-              </span>
-              <span>{% translate 'Log out' %}</span>
-            </a>
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="button is-link">
+                <span class="icon">
+                  <i class="fas fa-right-from-bracket"></i>
+                </span>
+                <span>{% translate 'Log out' %}</span>
+              </button>
+            </form>
             {% else %}
             <a class="button is-primary" href="{% url 'login' %}">
               <span class="icon">

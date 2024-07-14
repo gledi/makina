@@ -17,7 +17,7 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
@@ -28,12 +28,12 @@ classifiers = [
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
 ]
 dependencies = [
-  "django[argon2]<5.0",
+  "django[argon2]",
   "environs",
   "dj-database-url",
   "djangorestframework",
   "django-crispy-forms",
-  "crispy-bootstrap5",
+  "crispy-bulma",
   "pillow",
   "django-imagekit",
   "django-taggit",
@@ -51,6 +51,7 @@ dependencies = [
   "channels[daphne]",
   "channels-redis",
   "stripe",
+  "fontawesomefree",
 ]
 
 [project.optional-dependencies]

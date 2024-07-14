@@ -12,7 +12,7 @@
 <form action="" method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
   {% crispy form %}
-  {% crispy formset %}
+  {% crispy formset formset_helper %}
 
   <div class="form-actions">
     <button type="submit" class="button is-primary">Save</button>

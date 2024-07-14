@@ -12,11 +12,11 @@ ENV PATH=${VENV_DIR}/bin:${PATH}
 WORKDIR /app
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get upgrade --yes && \
-    apt-get install --yes --no-install-recommends libpq5 && \
-    apt-get autoremove --yes --purge && \
-    apt-get autoclean --yes && \
-    apt-get clean --yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade --yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends libpq5 && \
+    DEBIAN_FRONTEND=noninteractive apt-get autoremove --yes --purge && \
+    DEBIAN_FRONTEND=noninteractive apt-get autoclean --yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get clean --yes && \
     rm -rf /var/lib/apt/lists/* && \
     useradd --system --user-group --no-create-home --shell /sbin/nologin makina
 
@@ -28,11 +28,11 @@ ENV VENV_DIR=/opt/venv
 WORKDIR /app
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get upgrade --yes && \
-    apt-get install --yes --no-install-recommends libpq-dev && \
-    apt-get autoremove --yes --purge && \
-    apt-get autoclean --yes && \
-    apt-get clean --yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade --yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends libpq-dev && \
+    DEBIAN_FRONTEND=noninteractive apt-get autoremove --yes --purge && \
+    DEBIAN_FRONTEND=noninteractive apt-get autoclean --yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get clean --yes && \
     rm -rf /var/lib/apt/lists/* && \
     python -m venv --prompt=makina ${VENV_DIR}
 

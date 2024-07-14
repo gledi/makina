@@ -8,7 +8,6 @@
   <div>
     <a href="{% url 'vehicle-add' %}" class="button is-primary">Add new Vehicle</a>
     {% if perms.vehicles.publish_vehicle %}
-    |
     <a href="{% url 'vehicle-manage' %}" class="button is-warning">Manage Vehicles</a>
     {% endif %}
   </div>
