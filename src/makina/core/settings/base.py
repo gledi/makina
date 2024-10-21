@@ -3,21 +3,24 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from environs import Env
 
+from makina.utils import setup_env
+
 env = Env()
+setup_env(env)
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ROOT_DIR = BASE_DIR.parent.parent
 
-SECRET_KEY = env.str("SECRET_KEY")
+SECRET_KEY = env.str("SECRET_KEY", default="SuperDuperSecretK3Y")
 
 DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
-# Application definition
-
 INSTALLED_APPS = [
+    "daphne",
     # django builtins
     "django.contrib.admin",
     "django.contrib.auth",
@@ -27,6 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     # 3rd party apps
+    "channels",
     "rest_framework",
     "crispy_forms",
     "crispy_bulma",
@@ -71,6 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "makina.core.wsgi.application"
+ASGI_APPLICATION = "makina.core.asgi.application"
 
 
 DATABASES = {"default": env.dj_db_url("DATABASE_URL")}
@@ -104,9 +109,9 @@ TIME_ZONE = "UTC"
 USE_TZ = True
 
 
-STATIC_ROOT = ROOT_DIR / "static"
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = ROOT_DIR / "static"
 
 
 MEDIA_URL = "media/"
@@ -140,4 +145,4 @@ LOGGING = {
 }
 
 STRIPE_PUBLISHABLE_KEY = env.str("STRIPE_PUBLISHABLE_KEY")
-STRIPE_SECRET_KEY = env.str("STRIPE_SECRET_KEY")
+STRIPE_SECRET_KEY = env.filecontents("STRIPE_SECRET_KEY_FILE", default="sk_test_abc123")

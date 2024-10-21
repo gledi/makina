@@ -31,6 +31,7 @@ dependencies = [
   "django[argon2]",
   "environs",
   "dj-database-url",
+  "django-cache-url",
   "djangorestframework",
   "django-crispy-forms",
   "crispy-bulma",
@@ -55,8 +56,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-prod = ["daphne", "twisted[tls,http2]"]
-test = ["pytest", "pytest-django", "pytest-cov", "model-bakery", "faker"]
+prod = ["twisted[tls,http2]"]
 dev = [
   "debugpy",
   "django-debug-toolbar",
@@ -64,8 +64,12 @@ dev = [
   "django-silk",
   "ipython",
   "ruff",
-  "black",
   "graphviz",
+  "faker",
+  "pytest",
+  "pytest-django",
+  "pytest-cov",
+  "model-bakery",
 ]
 
 [project.scripts]
@@ -129,7 +133,13 @@ docstring-quotes = "double"
 
 [tool.ruff.isort]
 known-first-party = ["makina"]
-known-third-party = ["django"]
+known-third-party = ["django", "rest_framework", "taggit", "imagekit", "pillow"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [tool.pytest.ini_options]
 pythonpath = ["makina"]

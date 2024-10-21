@@ -1,0 +1,72 @@
+services:
+  app:
+    image: gledi/makina:dev
+    profiles: ["app"]
+    platform: linux/amd64
+    container_name: makina-app
+    hostname: app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    environment:
+      RUNNING_IN_DOCKER: 'true'
+      DJANGO_SETTINGS_MODULE: makina.core.settings.dev
+      DEBUG: 'true'
+      SECRET_KEY: SuperDuperSecretK3Y
+      DATABASE_URL: postgres://dontdrink:anddrive@db:5432/makina
+      STRIPE_PUBLISHABLE_KEY: pk_test_51Jw774LmYIXXKBgS40qd7YI2c3no8bGZyGTjkO13uQxLT30DluL0FtAiP9NFEdTgmvAsMqo4d5mOYHQQ9ECTbf0M00Hqmw8Tqw
+      STRIPE_SECRET_KEY_FILE: /run/secrets/stripe_secret_key
+    volumes:
+      - /app/.venv
+      - .:/app
+    secrets:
+      - stripe_secret_key
+    command: ["makina", "runserver"]
+
+  db:
+    image: postgres:16-alpine
+    profiles: ["infrastructure"]
+    container_name: makina-db
+    hostname: db
+    environment:
+      TZ: UTC
+      PGTZ: UTC
+      POSTGRES_DB: makina
+      POSTGRES_USER: dontdrink
+      POSTGRES_PASSWORD: anddrive
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready --host localhost --port 5432 --username dontdrink --dbname makina"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  cache:
+    image: redis:7.2-alpine
+    profiles: ["infrastructure"]
+    container_name: crosswords-cache
+    hostname: cache
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli", "--raw", "incr", "healthcheck:ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - cache-data:/data
+
+secrets:
+  stripe_secret_key:
+    file: .secrets/stripe_secret_key.txt
+
+volumes:
+  db-data:
+  cache-data:

@@ -166,5 +166,11 @@ static/*
 media/*
 !media/.gitkeep
 
+# docker compose secrets
+.secrets
+
 # direnv https://direnv.net/
 .envrc
+
+.env.local
+.env.development.local
