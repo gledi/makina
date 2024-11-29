@@ -1,25 +1,24 @@
-.PHONY: info venv list outdated tools compile compile/dry sync sync/dry install install-dev dev \
+.PHONY: help version \
+	venv list outdated tools compile compile/dry sync sync/dry install install-dev dev \
 	lint watch fix format \
 	run shellplus \
 	img-dev img-prod img \
-	build up up/debug svc infrastructure down destroy ps top start stop logs shell djshell
+	build up up/debug svc infrastructure down destroy ps top stats start stop logs shell djshell
 
-.SILENT: help info venv
+.SILENT: help version venv
 
 .DEFAULT_GOAL := help
 
 
 ARCH := $(shell uname -m)
 PLATFORM :=
-PY_VERSION := 3.12
+PY_VERSION := 3.13
 PYENV_PREFIX := $(shell pyenv prefix $(PY_VERSION))
 PYENV_PYTHON_BIN := $(PYENV_PREFIX)/bin/python
 VENV_DIR := $(CURDIR)/.venv
 VENV_PROMPT := makina
 PY := $(VENV_DIR)/bin/python
 REPOSITORY := gledi/makina
-SVC = web
-CMD = bash
 
 PROFILES := --profile app --profile infrastructure
 
@@ -61,7 +60,7 @@ help:
 	echo "  up:          Start docker compose services"
 	echo "  up/debug:    Start docker compose services where our app is debuggable"
 	echo "  svc:         Start a specific docker compose service"
-	echo "  infrastructure: Start docker compose services for infrastructure (db, cache, etc.)"
+	echo "  infra infrastructure: Start docker compose services for infrastructure (db, cache, etc.)"
 	echo "  down:        Stop and remove docker compose services"
 	echo "  destroy:     Stop and remove docker compose services with volumes"
 	echo "  ps:          List docker compose services"
@@ -73,22 +72,13 @@ help:
 	echo "  shell:       Enter a docker compose service"
 	echo "  djshell:     Enter django's interactive shell running in a docker compose service"
 
+print-% : ; @echo $* = $($*)
 
-info:
-	echo "ARCH =" $(ARCH)
-	echo "PLATFORM =" $(PLATFORM)
-	echo "PY_VERSION =" $(PY_VERSION)
-	echo "PYENV_PREFIX =" $(PYENV_PREFIX)
-	echo "PYENV_PYTHON_BIN =" $(PYENV_PYTHON_BIN)
-	echo "VENV_DIR =" $(VENV_DIR)
-	echo "VENV_PROMPT =" $(VENV_PROMPT)
-	echo "PY =" $(PY)
-	echo "REPOSITORY =" $(REPOSITORY)
-	echo "TAG =" $(TAG)
-	echo "SVC =" $(SVC)
-	echo "CMD =" $(CMD)
-	echo "PROFILES =" $(PROFILES)
-
+version:
+	$(PY) --version
+	$(PY) -c "import sys; print('GIL?', sys._is_gil_enabled())"
+	echo -n "makina "
+	$(PY) -m makina --version
 
 venv:
 	if ! [[ -d $(VENV_DIR) ]]; then $(PYENV_PYTHON_BIN) -m venv --prompt=$(VENV_PROMPT) $(VENV_DIR); else echo "$(VENV_DIR) already exists. skipping ..."; fi
@@ -100,15 +90,15 @@ outdated:
 	$(PY) -m pip list --outdated
 
 tools:
-	$(PY) -m pip install --upgrade --upgrade-strategy=eager pip setuptools pip-tools
+	$(PY) -m pip install --upgrade --upgrade-strategy=eager pip pip-tools
 
 compile:
-	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --extra=prod --output-file requirements/prod.txt
-	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --all-extras --output-file requirements/dev.txt
+	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --strip-extras --upgrade --extra=prod --output-file requirements/prod.txt
+	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --strip-extras --upgrade --all-extras --output-file requirements/dev.txt
 
 compile/dry:
-	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --extra=prod --output-file requirements/prod.txt
-	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --all-extras --output-file requirements/dev.txt
+	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --strip-extras --upgrade --extra=prod --output-file requirements/prod.txt
+	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --strip-extras --upgrade --all-extras --output-file requirements/dev.txt
 
 sync:
 	$(PY) -m piptools sync requirements/dev.txt
@@ -181,6 +171,9 @@ ps:
 top:
 	docker compose $(PROFILES) top
 
+stats:
+	docker compose $(PROFILES) stats
+
 start:
 	docker compose $(PROFILES) start $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
 
@@ -194,7 +187,7 @@ logs:
 	docker compose $(PROFILES) logs -f $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
 
 shell:
-	docker compose $(PROFILES) exec $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app) $(CMD)
+	docker compose $(PROFILES) exec $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app) bash
 
 djshell:
 	docker compose $(PROFILES) exec app makina shell_plus
