@@ -4,13 +4,13 @@ import django.contrib.auth.models
 import django.contrib.auth.validators
 import django.db.models.deletion
 import django.utils.timezone
-import makina.users.models
 from django.conf import settings
 from django.db import migrations, models
 
+import makina.users.models
+
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

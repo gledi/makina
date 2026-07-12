@@ -38,5 +38,3 @@ window.addEventListener("load", async ev => {
     }
   });
 });
-
-

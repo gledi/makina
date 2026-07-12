@@ -46,4 +46,3 @@ class Registration(models.Model):
 
     def get_absolute_url(self):
         return reverse("registration-activation", kwargs={"key": self.activation_key})
-

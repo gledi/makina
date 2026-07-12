@@ -174,3 +174,12 @@ media/*
 
 .env.local
 .env.development.local
+
+
+# ai agents and tools
+.claude/local.settings.json
+.claude/.headroom_wrap_marker.json
+CLAUDE.local.md
+.superpowers/
+.serena/
+.tokensave/

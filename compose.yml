@@ -13,11 +13,11 @@ services:
       cache:
         condition: service_healthy
     environment:
-      RUNNING_IN_DOCKER: 'true'
+      RUNNING_IN_DOCKER: "true"
       DJANGO_SETTINGS_MODULE: makina.core.settings.dev
-      DEBUG: 'true'
+      DEBUG: "true"
       SECRET_KEY: SuperDuperSecretK3Y
-      DATABASE_URL: postgres://dontdrink:anddrive@db:5432/makina
+      DATABASE_URL: postgres://makina:makina@db:5432/makina
       STRIPE_PUBLISHABLE_KEY: pk_test_51Jw774LmYIXXKBgS40qd7YI2c3no8bGZyGTjkO13uQxLT30DluL0FtAiP9NFEdTgmvAsMqo4d5mOYHQQ9ECTbf0M00Hqmw8Tqw
       STRIPE_SECRET_KEY_FILE: /run/secrets/stripe_secret_key
     volumes:
@@ -28,28 +28,32 @@ services:
     command: ["makina", "runserver"]
 
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     profiles: ["infrastructure"]
     container_name: makina-db
     hostname: db
     environment:
       TZ: UTC
       PGTZ: UTC
+      POSTGRES_USER: makina
+      POSTGRES_PASSWORD: makina
       POSTGRES_DB: makina
-      POSTGRES_USER: dontdrink
-      POSTGRES_PASSWORD: anddrive
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready --host localhost --port 5432 --username dontdrink --dbname makina"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --host localhost --port 5432 --username makina --dbname makina",
+        ]
       interval: 2s
       timeout: 5s
       retries: 10
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/18/docker
 
   cache:
-    image: redis:7.2-alpine
+    image: redis:8.10-alpine
     profiles: ["infrastructure"]
     container_name: crosswords-cache
     hostname: cache

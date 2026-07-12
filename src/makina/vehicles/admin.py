@@ -18,4 +18,3 @@ class VehicleAdmin(admin.ModelAdmin):
     list_editable = ("year", "transmission")
     list_filter = ("year", "transmission")
     inlines = (PhotoInline,)
-

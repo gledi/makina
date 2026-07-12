@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -15,7 +15,9 @@ repos:
       - id: check-merge-conflict
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.7.0
+    rev: v0.16.4
     hooks:
-      - id: ruff
-        args: [--config=pyproject.toml]
+      - id: ruff-check
+        args: ["--fix", "--config=pyproject.toml"]
+      - id: ruff-format
+        args: ["--config=pyproject.toml"]

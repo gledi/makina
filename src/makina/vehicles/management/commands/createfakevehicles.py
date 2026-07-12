@@ -2,12 +2,10 @@ import io
 import random
 
 from django.contrib.auth import get_user_model
-from django.core.management.base import BaseCommand
 from django.core.files.images import ImageFile
+from django.core.management.base import BaseCommand
 from faker import Faker
-
-from vehicles.models import Vehicle, Photo
-
+from vehicles.models import Photo, Vehicle
 
 User = get_user_model()
 

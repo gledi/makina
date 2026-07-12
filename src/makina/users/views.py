@@ -53,8 +53,10 @@ def register(request):
             )
             messages.info(
                 request,
-                _("Registration successful. "
-                "Please check your email for further instructions."),
+                _(
+                    "Registration successful. "
+                    "Please check your email for further instructions."
+                ),
             )
             return redirect("/")
     else:
@@ -73,5 +75,7 @@ def registration_activate(request, key):
     registration.save()
     registration.user.is_active = True
     registration.user.save()
-    messages.success(request, _("Your account has been activated. You can try to login now."))
+    messages.success(
+        request, _("Your account has been activated. You can try to login now.")
+    )
     return redirect(settings.LOGIN_URL)

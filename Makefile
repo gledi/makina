@@ -1,203 +1,121 @@
-.PHONY: info venv list outdated tools compile compile/dry sync sync/dry install install-dev dev \
-	lint watch fix format \
-	run shellplus \
-	img-dev img-prod img \
-	build up up/debug svc infrastructure down destroy ps top start stop logs shell djshell
-
-.SILENT: help info venv
-
 .DEFAULT_GOAL := help
 
+SHELL := /bin/bash
 
-ARCH := $(shell uname -m)
-PLATFORM :=
-PY_VERSION := 3.12
-PYENV_PREFIX := $(shell pyenv prefix $(PY_VERSION))
-PYENV_PYTHON_BIN := $(PYENV_PREFIX)/bin/python
+PROJECTNAME := $(shell basename $(CURDIR))
+PACKAGE_NAME := $(PROJECTNAME)
+
+PY_VERSION := 3.14
 VENV_DIR := $(CURDIR)/.venv
-VENV_PROMPT := makina
+VENV_PROMPT := $(PROJECTNAME)-$(PY_VERSION)
+
 PY := $(VENV_DIR)/bin/python
-REPOSITORY := gledi/makina
-SVC = web
-CMD = bash
+UV := $(shell which uv 2>/dev/null || echo "uv")
+
+IMAGE_NAME := gledi/$(PROJECTNAME)
+
+CMD := /bin/bash
 
 PROFILES := --profile app --profile infrastructure
 
-ifeq ($(ARCH),arm64)
-	PLATFORM = --platform linux/amd64
-endif
 
-help:
-	echo "Usage: make [target]"
+.PHONY: help print-%
+.SILENT: help print-%
+
+help: ## Show this help message and exit
 	echo ""
-	echo "Targets:"
-	echo "  info:        Show various variables used in the Makefile"
+	echo "Manage $(PROJECTNAME). Usage:"
 	echo ""
-	echo "  venv:        Create virtual environment"
-	echo "  list:        List installed packages"
-	echo "  outdated:    List outdated packages"
-	echo "  tools:       Install pip-tools"
-	echo "  compile:     Compile requirements"
-	echo "  compile/dry: Dry-run compile requirements"
-	echo "  sync:        Sync requirements"
-	echo "  sync/dry:    Dry-run sync requirements"
-	echo "  install:     Install package"
-	echo "  install-dev: Install package in editable mode"
-	echo "  dev:         Prepare package for development"
+	grep -E '^[a-zA-Z_/%-]+( [a-zA-Z_/%-]+)*:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36mmake %-28s\033[0m %s\n", $$1, $$2}'
 	echo ""
-	echo "  lint:        Lint code using ruff"
-	echo "  watch:       Watch code using ruff"
-	echo "  fix:         Fix code using ruff"
-	echo "  format:      Format code using ruff"
-	echo ""
-	echo "  run:         Run development server"
-	echo "  shellplus:   Enter django's interactive shell"
-	echo ""
-	echo "  img-dev:     Build docker image for development"
-	echo "  img-prod:    Build docker image for production"
-	echo "  img:         Build docker image for production"
-	echo ""
-	echo "  build:       Build docker compose services"
-	echo "  up:          Start docker compose services"
-	echo "  up/debug:    Start docker compose services where our app is debuggable"
-	echo "  svc:         Start a specific docker compose service"
-	echo "  infrastructure: Start docker compose services for infrastructure (db, cache, etc.)"
-	echo "  down:        Stop and remove docker compose services"
-	echo "  destroy:     Stop and remove docker compose services with volumes"
-	echo "  ps:          List docker compose services"
-	echo "  top:         Display the running processes of docker compose service(s)"
-	echo "  start:       Start a docker compose service"
-	echo "  stop:        Stop a docker compose service"
-	echo "  restart:     Restart a docker compose service"
-	echo "  logs:        Show logs of a docker compose service"
-	echo "  shell:       Enter a docker compose service"
-	echo "  djshell:     Enter django's interactive shell running in a docker compose service"
+
+print-% : ; @echo $* = $($*)
 
 
-info:
-	echo "ARCH =" $(ARCH)
-	echo "PLATFORM =" $(PLATFORM)
-	echo "PY_VERSION =" $(PY_VERSION)
-	echo "PYENV_PREFIX =" $(PYENV_PREFIX)
-	echo "PYENV_PYTHON_BIN =" $(PYENV_PYTHON_BIN)
-	echo "VENV_DIR =" $(VENV_DIR)
-	echo "VENV_PROMPT =" $(VENV_PROMPT)
-	echo "PY =" $(PY)
-	echo "REPOSITORY =" $(REPOSITORY)
-	echo "TAG =" $(TAG)
-	echo "SVC =" $(SVC)
-	echo "CMD =" $(CMD)
-	echo "PROFILES =" $(PROFILES)
+.PHONY: venv list outdated lock lock/check sync sync/dry deptree
+.SILENT: venv
+
+venv: ## Create a virtual environment
+	if ! [[ -d $(VENV_DIR) ]]; then \
+		uv venv --no-project --seed --link-mode=copy --prompt=$(VENV_PROMPT) $(VENV_DIR) --python=$(PY_VERSION); \
+	else \
+		echo "Virtual environment already exists"; \
+	fi
+
+list: ## List all dependencies
+	$(UV) pip list
+
+outdated: ## List outdated dependencies
+	$(UV) pip list --outdated
+
+lock: ## Lock dependencies (uv lock --upgrade)
+	$(UV) lock --refresh --upgrade --resolution=highest
+
+lock/check: ## Check lockfile is up-to-date
+	$(UV) lock --check
+
+sync: ## Sync dependencies from lockfile
+	$(UV) sync --locked --all-extras --all-groups --link-mode=copy
+
+sync/dry: ## Dry run of syncing dependencies from lockfile
+	$(UV) sync --locked --all-extras --all-groups --link-mode=copy --dry-run
+
+deptree: ## Show dependency tree
+	$(UV) tree --outdated
 
 
-venv:
-	if ! [[ -d $(VENV_DIR) ]]; then $(PYENV_PYTHON_BIN) -m venv --prompt=$(VENV_PROMPT) $(VENV_DIR); else echo "$(VENV_DIR) already exists. skipping ..."; fi
+.PHONY: version build clean dev
+.SILENT: version clean
 
-list:
-	$(PY) -m pip list
+version: ## Show Python, uv and package versions
+	$(UV) run --locked python --version
+	$(UV) --version
+	$(UV) run --locked python -c "from importlib.metadata import version; print('$(PACKAGE_NAME)', version('$(PACKAGE_NAME)'))"
 
-outdated:
-	$(PY) -m pip list --outdated
+build: ## Build the package
+	$(UV) build
 
-tools:
-	$(PY) -m pip install --upgrade --upgrade-strategy=eager pip setuptools pip-tools
+clean: ## Remove build artifacts and caches
+	rm -rf dist/ build/
+	rm -rf .pytest_cache/ .ruff_cache/ .nox/
+	find . -path ./.venv -prune -o -type d -name '*.egg-info' -print -exec rm -rf {} +
+	find .unitreports -mindepth 1 ! -name .gitkeep -delete
+	find . -path ./.venv -prune -o -type d -name __pycache__ -print -exec rm -rf {} +
 
-compile:
-	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --extra=prod --output-file requirements/prod.txt
-	$(PY) -m piptools compile --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --all-extras --output-file requirements/dev.txt
+dev: venv lock sync ## Prepare development environment (create venv, lock dependencies, sync from lockfile)
 
-compile/dry:
-	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --extra=prod --output-file requirements/prod.txt
-	$(PY) -m piptools compile --dry-run --no-header --allow-unsafe --resolver=backtracking --annotation-style=line --upgrade --all-extras --output-file requirements/dev.txt
+.PHONY: image image/prod image/dev
 
-sync:
-	$(PY) -m piptools sync requirements/dev.txt
+image image/prod: ## Build Production Docker Image
+	docker buildx build --target prod --tag $(IMAGE_NAME):latest --tag $(IMAGE_NAME):prod .
 
-sync/dry:
-	$(PY) -m piptools sync --dry-run requirements/dev.txt
-
-install:
-	$(PY) -m pip install --no-deps .
-
-install-dev:
-	$(PY) -m pip install --no-deps --editable .
-
-dev: tools compile sync install-dev
+image/dev: ## Build Development Docker Image
+	docker buildx build --target dev --tag $(IMAGE_NAME):dev .
 
 
-lint:
-	$(PY) -m ruff check --preview ./src
+.PHONY: up build/compose up/build up/debug down destroy infra infrastructure
 
-watch:
-	$(PY) -m ruff check --watch ./src
+up: ## Run all services in all profiles
+	docker compose $(PROFILES) up -d
 
-fix:
-	$(PY) -m ruff --fix ./src
+build/compose: ## Build all services in all profiles
+	docker compose $(PROFILES) build
 
-format:
-	$(PY) -m ruff format ./src
+up/build: ## Run all services in all profiles and force build them
+	docker compose $(PROFILES) up -d --build
 
+up/debug: ## Run all services in all profiles (app will start in debug mode)
+	docker compose --file compose.yml --file compose.debug.yml $(PROFILES) up -d
 
-run:
-	makina runserver
+down: ## Stop and remove all services in all profiles
+	docker compose $(PROFILES) down --remove-orphans
 
-shellplus:
-	makina shell_plus
+destroy: ## Stop all services, remove volumes and orphans
+	docker compose $(PROFILES) down --volumes --remove-orphans
 
-
-img-dev:
-	docker build $(PLATFORM) --tag $(REPOSITORY):dev --force-rm --target dev .
-
-img-prod:
-	docker build $(PLATFORM) --tag $(REPOSITORY):prod --tag $(REPOSITORY):latest --force-rm .
-
-img: img-prod
-
-
-build:
-	docker compose $(PROFILES) build --parallel
-
-up:
-	docker compose $(PROFILES)  up --build -d
-
-up/debug:
-	docker compose $(PROFILES) --file compose.yml --file compose.debug.yml up -d
-
-svc:
-	docker compose $(PROFILES) up --build -d $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
-
-infrastructure:
+infra infrastructure: ## Run infrastructure services
 	docker compose --profile infrastructure up -d
 
-down:
-	docker compose $(PROFILES) down --remove-orphans --rmi local
-
-destroy:
-	docker compose $(PROFILES) down --remove-orphans --rmi local --volumes
-
-ps:
-	docker compose $(PROFILES) ps --all
-
-top:
-	docker compose $(PROFILES) top
-
-start:
-	docker compose $(PROFILES) start $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
-
-stop:
-	docker compose $(PROFILES) stop $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
-
-restart:
-	docker compose $(PROFILES) restart $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
-
-logs:
-	docker compose $(PROFILES) logs -f $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app)
-
-shell:
-	docker compose $(PROFILES) exec $(if $(filter-out $@,$(MAKECMDGOALS)), $(filter-out $@,$(MAKECMDGOALS)), app) $(CMD)
-
-djshell:
-	docker compose $(PROFILES) exec app makina shell_plus
 
 %:
 	@:
